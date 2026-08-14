@@ -3,17 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Comfortaa:wght@700&display=swap" rel="stylesheet">
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', cursive, sans-serif; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
+      font-family: 'Comfortaa', cursive, sans-serif;
       background: linear-gradient(-45deg, #ff9a9e, #fecfef, #a1c4fd, #c2e9fb);
       background-size: 400% 400%; animation: gradientBG 12s ease infinite;
       min-height: 100vh; display: flex; justify-content: center; align-items: center; text-align: center;
-      overflow: hidden; position: relative;
+      overflow: hidden; position: relative; padding: 20px 0;
     }
     @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
-    /* Floating Background Hearts */
     .bg-heart {
       position: absolute; bottom: -30px; font-size: 1.2rem; pointer-events: none;
       animation: floatUp 6s linear infinite; opacity: 0.7; z-index: 1;
@@ -24,41 +25,70 @@
     }
 
     .container {
-      width: 88%; max-width: 370px; padding: 25px 20px; background: rgba(255, 255, 255, 0.65);
-      border-radius: 25px; backdrop-filter: blur(15px); border: 2px solid rgba(255, 255, 255, 0.8);
-      box-shadow: 0 10px 30px rgba(255, 182, 193, 0.4); z-index: 10;
+      width: 88%; max-width: 370px; padding: 25px 20px;
+      background: rgba(255, 255, 255, 0.45); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-radius: 30px; border: 1.5px solid rgba(255, 255, 255, 0.8);
+      box-shadow: 0 20px 40px rgba(255, 105, 180, 0.2); z-index: 10;
     }
-    h2 { color: #ff477e; margin-bottom: 15px; font-size: 1.4rem; }
-    .letter-card {
-      background: #ffffff; color: #4a4a4a; padding: 22px 18px; border-radius: 20px;
-      text-align: left; font-family: 'Georgia', serif; line-height: 1.65; font-size: 0.92rem;
-      box-shadow: 0 8px 20px rgba(255, 182, 193, 0.3); border: 1px solid #ffe4e1;
+    h2 { color: #ff477e; margin-bottom: 12px; font-size: 1.4rem; }
+    
+    /* Interactive Envelope Container */
+    .envelope-wrapper {
+      background: #ffffff; padding: 22px 18px; border-radius: 18px;
+      box-shadow: 0 10px 25px rgba(255, 182, 193, 0.4); border: 1px solid #ffe4e1;
+      text-align: left; position: relative;
     }
-    .letter-card p { margin-bottom: 10px; }
-    .signature { text-align: right; font-weight: bold; color: #ff477e; margin-top: 12px; }
+    .envelope-icon { font-size: 3.5rem; text-align: center; cursor: pointer; animation: pulse 1.5s infinite; }
+    @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+    
+    /* Handwritten Romantic Letter */
+    .letter-content {
+      font-family: 'Caveat', cursive; color: #4a4a4a; line-height: 1.55; font-size: 1.25rem; display: none;
+    }
+    .letter-content p { margin-bottom: 10px; }
+    .signature { text-align: right; font-weight: bold; color: #ff477e; margin-top: 12px; font-size: 1.4rem; }
+    
     .btn {
       background: linear-gradient(45deg, #ff758c, #ff7eb3); border: none; color: white;
-      padding: 12px 28px; border-radius: 25px; font-weight: bold; cursor: pointer;
+      padding: 12px 28px; border-radius: 30px; font-weight: bold; cursor: pointer;
       text-decoration: none; display: inline-block; margin-top: 15px;
+      box-shadow: 0 8px 20px rgba(255, 117, 140, 0.4);
+      transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
+    .btn:active { transform: scale(0.92); }
   </style>
 </head>
 <body>
+
+  <audio id="openSfx" src="https://assets.mixkit.co/active_storage/sfx/2014/2014-preview.mp3" preload="auto"></audio>
+
   <div class="container">
     <h2>💌 A Letter Just For You</h2>
 
-    <div class="letter-card">
-      <p><strong>Happy Birthday, Cutiepie! 🎉✨</strong></p>
-      <p>I built this little corner of the internet just for you, because a normal card felt far too small to hold all the happiness you bring into my life.</p>
-      <p>Thank you for all the golden memories, late-night laughs, silly jokes, and every ordinary day you quietly make extraordinary.</p>
-      <p>Here’s to another wonderful year full of magic, smiles, and endless adventures!</p>
-      <div class="signature">With all my love, always ❤️</div>
+    <div class="envelope-wrapper">
+      <div id="envelope" class="envelope-icon" onclick="openLetter()">✉️</div>
+      <p id="tapHint" style="text-align: center; color: #ff477e; font-size: 0.85rem; font-weight: bold;">Tap envelope to open</p>
+      
+      <div id="letter" class="letter-content">
+        <p><strong>Happy Birthday, Cutiepie! 🎉✨</strong></p>
+        <p>I built this little corner of the internet just for you, because a normal card felt far too small to hold all the happiness you bring into my life.</p>
+        <p>Thank you for all the golden memories, late-night laughs, silly jokes, and every ordinary day you quietly make extraordinary.</p>
+        <p>Here’s to another wonderful year full of magic, smiles, and endless adventures!</p>
+        <div class="signature">With all my love, always ❤️</div>
+      </div>
     </div>
 
     <a href="passcode.html" class="btn">Replay Surprise 🔄</a>
   </div>
 
   <script>
+    function openLetter() {
+      document.getElementById('openSfx').play().catch(e => {});
+      document.getElementById('envelope').style.display = 'none';
+      document.getElementById('tapHint').style.display = 'none';
+      document.getElementById('letter').style.display = 'block';
+    }
+
     function createBgHeart() {
       const h = document.createElement('div');
       h.classList.add('bg-heart');
