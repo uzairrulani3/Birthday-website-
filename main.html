@@ -2,28 +2,51 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>For Ayesha 💗</title>
   <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&display=swap" rel="stylesheet">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body, html { width: 100%; height: 100%; overflow: hidden; background: #ffd1e8; font-family: 'Comfortaa', cursive, sans-serif; }
+    * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; -webkit-user-select: none; }
+    body, html { width: 100%; height: 100%; overflow: hidden; font-family: 'Comfortaa', cursive, sans-serif; }
     iframe { border: none; width: 100vw; height: 100vh; display: block; }
+    
     #startScreen {
       position: fixed; inset: 0; background: linear-gradient(-45deg, #ff9a9e, #fecfef, #a1c4fd, #c2e9fb);
       background-size: 400% 400%; animation: gradientBG 12s ease infinite;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
-      font-size: 1.4rem; color: #ff477e; font-weight: bold; z-index: 999; cursor: pointer; padding: 20px;
+      font-size: 1.4rem; color: #ff477e; font-weight: bold; z-index: 9999; cursor: pointer; padding: 20px;
     }
     @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
     
     .start-card {
-      background: rgba(255, 255, 255, 0.5); padding: 30px 40px; border-radius: 30px;
+      background: rgba(255, 255, 255, 0.55); padding: 30px 40px; border-radius: 30px;
       backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
       box-shadow: 0 15px 35px rgba(255, 105, 180, 0.25); border: 1.5px solid rgba(255, 255, 255, 0.8);
       transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
-    .start-card:hover { transform: scale(1.05); }
+    .start-card:active { transform: scale(0.95); }
+
+    /* Floating Music Bar */
+    .music-bar {
+      position: fixed; top: 15px; right: 15px; z-index: 8000;
+      background: rgba(255, 255, 255, 0.65); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+      padding: 8px 16px; border-radius: 30px; border: 1.5px solid rgba(255, 255, 255, 0.8);
+      display: flex; align-items: center; gap: 10px; box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+    .music-btn {
+      background: none; border: none; font-size: 1.1rem; cursor: pointer;
+      transition: transform 0.15s; color: #ff477e;
+    }
+    .music-btn:active { transform: scale(0.85); }
+    
+    /* Equalizer Animation */
+    .eq { display: flex; gap: 3px; align-items: flex-end; height: 14px; }
+    .eq-bar { width: 3px; background: #ff477e; border-radius: 2px; animation: eqAnim 0.8s infinite ease-in-out alternate; }
+    .eq-bar:nth-child(1) { height: 60%; animation-delay: 0.1s; }
+    .eq-bar:nth-child(2) { height: 100%; animation-delay: 0.3s; }
+    .eq-bar:nth-child(3) { height: 40%; animation-delay: 0.2s; }
+    @keyframes eqAnim { 0% { height: 20%; } 100% { height: 100%; } }
+    .paused .eq-bar { animation-play-state: paused; height: 20% !important; }
   </style>
 </head>
 <body>
@@ -34,22 +57,70 @@
     </div>
   </div>
 
-  <audio id="bgm" loop preload="auto">
-    <source src="music/birthday.mp3" type="audio/mpeg">
-  </audio>
+  <!-- Floating Audio Controls -->
+  <div class="music-bar">
+    <div class="eq paused" id="eq">
+      <div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div>
+    </div>
+    <button class="music-btn" onclick="prevSong()">⏮️</button>
+    <button class="music-btn" id="playBtn" onclick="togglePlay()">⏸️</button>
+    <button class="music-btn" onclick="nextSong()">⏭️</button>
+  </div>
 
-  <!-- Loads Passcode Page Directly -->
+  <audio id="bgm" preload="auto"></audio>
+
   <iframe id="frame" src="passcode.html"></iframe>
 
   <script>
+    const playlist = ["music/birthday1.mp3", "music/birthday2.mp3", "music/birthday3.mp3"];
+    let songIndex = 0;
     const music = document.getElementById("bgm");
+    const playBtn = document.getElementById("playBtn");
+    const eq = document.getElementById("eq");
     const start = document.getElementById("startScreen");
 
+    function loadSong(index) {
+      music.src = playlist[index];
+    }
+    loadSong(songIndex);
+
     start.addEventListener("click", () => {
-      music.currentTime = 0;
-      music.play().catch(e => console.log("Audio play error:", e));
+      music.play().then(() => {
+        playBtn.innerText = "⏸️";
+        eq.classList.remove("paused");
+      }).catch(e => console.log("Audio play error:", e));
       start.style.display = "none";
     });
+
+    function togglePlay() {
+      if (music.paused) {
+        music.play();
+        playBtn.innerText = "⏸️";
+        eq.classList.remove("paused");
+      } else {
+        music.pause();
+        playBtn.innerText = "▶️";
+        eq.classList.add("paused");
+      }
+    }
+
+    function nextSong() {
+      songIndex = (songIndex + 1) % playlist.length;
+      loadSong(songIndex);
+      music.play();
+      playBtn.innerText = "⏸️";
+      eq.classList.remove("paused");
+    }
+
+    function prevSong() {
+      songIndex = (songIndex - 1 + playlist.length) % playlist.length;
+      loadSong(songIndex);
+      music.play();
+      playBtn.innerText = "⏸️";
+      eq.classList.remove("paused");
+    }
+
+    music.addEventListener("ended", nextSong);
   </script>
 
 </body>
