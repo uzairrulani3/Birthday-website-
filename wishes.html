@@ -3,53 +3,66 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pop the Wishes 🎈</title>
+  <title>Pop Balloons 🎈</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
     body {
-      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-      color: #fff; min-height: 100vh; display: flex; justify-content: center; align-items: center; text-align: center;
+      background: linear-gradient(-45deg, #ff9a9e, #fecfef, #a1c4fd, #c2e9fb);
+      background-size: 400% 400%; animation: gradientBG 15s ease infinite;
+      min-height: 100vh; display: flex; justify-content: center; align-items: center; text-align: center;
     }
+    @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
     .container {
-      width: 90%; max-width: 400px; padding: 30px 20px; background: rgba(255, 255, 255, 0.08);
-      border-radius: 20px; backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.15);
+      width: 88%; max-width: 380px; padding: 30px 20px; background: rgba(255, 255, 255, 0.5);
+      border-radius: 25px; backdrop-filter: blur(15px); border: 2px solid rgba(255, 255, 255, 0.7);
+      box-shadow: 0 10px 30px rgba(255, 182, 193, 0.3);
     }
-    h2 { color: #ffd1dc; margin-bottom: 15px; }
-    .balloon-box { display: flex; justify-content: space-around; margin: 30px 0; }
+    h2 { color: #ff477e; margin-bottom: 10px; }
+    p { color: #555; font-size: 0.95rem; }
+    
+    .balloon-box { display: flex; justify-content: space-around; margin: 35px 0; }
     .balloon {
-      width: 50px; height: 65px; border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+      width: 55px; height: 70px; border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
       cursor: pointer; position: relative; transition: transform 0.2s;
+      box-shadow: inset -5px -5px 10px rgba(0,0,0,0.1);
     }
-    .balloon::after { content: '📍'; position: absolute; bottom: -12px; left: 17px; font-size: 10px; }
+    .balloon::after { content: '📍'; position: absolute; bottom: -12px; left: 20px; font-size: 10px; }
     .balloon.popped { visibility: hidden; }
-    .wish-display { min-height: 40px; color: #ffd1dc; font-style: italic; margin-bottom: 20px; }
+    
+    .wish-display { min-height: 55px; color: #ff477e; font-weight: 600; font-size: 1rem; margin-bottom: 20px; }
+    
     .btn {
       background: linear-gradient(45deg, #ff758c, #ff7eb3); border: none; color: white;
-      padding: 12px 25px; border-radius: 25px; font-weight: bold; cursor: pointer; text-decoration: none;
+      padding: 12px 28px; border-radius: 25px; font-weight: bold; cursor: pointer; text-decoration: none;
+      display: inline-block; box-shadow: 0 4px 15px rgba(255,117,140,0.4);
     }
   </style>
 </head>
 <body>
 
   <div class="container">
-    <h2>🎈 Pop a Wish</h2>
-    <p>Tap a balloon to unlock a hidden message!</p>
+    <h2>🎈 Pop a Balloon!</h2>
+    <p>Tap each balloon to discover sweet wishes ✨</p>
 
     <div class="balloon-box">
-      <div class="balloon" style="background: #ff758c;" onclick="pop(this, 'You bring so much warmth to my life! ✨')"></div>
-      <div class="balloon" style="background: #ff7eb3;" onclick="pop(this, 'Wishing you happiness today & forever! 💕')"></div>
-      <div class="balloon" style="background: #a88beb;" onclick="pop(this, 'Keep shining bright as always! 🌟')"></div>
+      <div class="balloon" style="background: #ff758c;" onclick="pop(this, 'May your year be filled with endless smiles & warmth! ✨🌸')"></div>
+      <div class="balloon" style="background: #ff7eb3;" onclick="pop(this, 'Wishing you all the love & sweet magic in the world! 💕🧸')"></div>
+      <div class="balloon" style="background: #a88beb;" onclick="pop(this, 'Always keep shining bright as the sweetest star! 🌟💖')"></div>
     </div>
 
-    <div class="wish-display" id="wishText">Select a balloon...</div>
+    <div class="wish-display" id="wishText">Tap a balloon above...</div>
 
-    <a href="player.html" class="btn">Listen to Song & Letter 🎵</a>
+    <a href="player.html" class="btn">Read My Letter 💌</a>
   </div>
 
   <script>
-    function pop(element, text) {
+    function pop(element, wish) {
+      // Balloon pop sound effect
+      let popAudio = new Audio('https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3');
+      popAudio.play();
+
       element.classList.add('popped');
-      document.getElementById('wishText').innerText = text;
+      document.getElementById('wishText').innerText = wish;
     }
   </script>
 </body>
