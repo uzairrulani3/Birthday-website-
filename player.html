@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Special Song & Letter 🎶</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+    body {
+      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      color: #fff; min-height: 100vh; display: flex; justify-content: center; align-items: center; text-align: center; padding: 20px 0;
+    }
+    .container {
+      width: 90%; max-width: 400px; padding: 25px 20px; background: rgba(255, 255, 255, 0.08);
+      border-radius: 20px; backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+    h2 { color: #ffd1dc; margin-bottom: 15px; }
+    
+    /* Music Player Card */
+    .player-card {
+      background: rgba(0, 0, 0, 0.25); padding: 15px; border-radius: 15px; margin-bottom: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .music-icon { font-size: 2rem; margin-bottom: 5px; animation: pulse 1.5s infinite alternate; }
+    @keyframes pulse { 0% { transform: scale(1); } 100% { transform: scale(1.1); } }
+    audio { width: 100%; margin-top: 10px; border-radius: 10px; }
+
+    /* Letter Box */
+    .letter-box {
+      background: #fff; color: #333; padding: 20px; border-radius: 12px;
+      text-align: left; font-family: 'Georgia', serif; line-height: 1.6;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3); font-size: 0.95rem;
+    }
+    .btn {
+      background: linear-gradient(45deg, #ff758c, #ff7eb3); border: none; color: white;
+      padding: 10px 20px; border-radius: 25px; font-weight: bold; cursor: pointer;
+      text-decoration: none; display: inline-block; margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>🎵 Birthday Song</h2>
+    
+    <!-- Custom Audio Player -->
+    <div class="player-card">
+      <div class="music-icon">🎶</div>
+      <p style="color: #ff7eb3; font-weight: bold;">Playing: Birthday Surprise</p>
+      <audio controls autoplay loop>
+        <source src="birthday.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+      </audio>
+    </div>
+
+    <h2>💌 A Letter Just For You</h2>
+    <div class="letter-box">
+      <p><strong>Happy Birthday!</strong></p><br>
+      <p>I kept this little corner of the internet just for you, because a normal card felt far too small for everything I wanted to say.</p><br>
+      <p>Thank you for all the golden evenings, terrible jokes, drives with no destination, and every ordinary day you quietly made better.</p><br>
+      <p>Here’s to another year of us, laughing at nothing at all. With all my love, always!</p>
+    </div>
+
+    <a href="index.html" class="btn">Replay Experience 🔄</a>
+  </div>
+
+</body>
+</html>
