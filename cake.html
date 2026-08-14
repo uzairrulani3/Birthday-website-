@@ -62,20 +62,22 @@
     }
     .btn:active { transform: scale(0.92); }
 
+    /* Birthday Rain Effect */
     .rain-drop {
       position: fixed; top: -50px; color: #ff3366; font-weight: 800;
-      font-size: 1.05rem; pointer-events: none; animation: fallSlow 6s linear forwards;
+      font-size: 1.1rem; pointer-events: none; animation: fallSlow 6s linear forwards;
       z-index: 100; text-shadow: 0 0 8px rgba(255,255,255,1); white-space: nowrap;
     }
     @keyframes fallSlow {
       0% { transform: translateY(0); opacity: 1; }
-      100% { transform: translateY(-110vh); opacity: 0; }
+      100% { transform: translateY(110vh); opacity: 0; }
     }
   </style>
 </head>
 <body>
 
-  <audio id="magicSfx" src="https://assets.mixkit.co/active_storage/sfx/2014/2014-preview.mp3" preload="auto"></audio>
+  <!-- Realistic Blowing Wind Sound -->
+  <audio id="blowSfx" src="https://assets.mixkit.co/active_storage/sfx/2598/2598-preview.mp3" preload="auto"></audio>
 
   <div class="container">
     <h2>🎂 Blow Out The Candle!</h2>
@@ -112,12 +114,14 @@
       candleBlown = true;
       if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
 
-      document.getElementById('magicSfx').play().catch(e => {});
+      document.getElementById('blowSfx').play().catch(e => {});
       document.getElementById('flameArea').style.display = 'none';
       document.getElementById('nextSection').style.display = 'block';
 
       confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });
-      setInterval(createRainDrop, 600);
+      
+      // Start Birthday Rain
+      setInterval(createRainDrop, 400);
     }
 
     function createRainDrop() {
