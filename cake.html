@@ -8,27 +8,38 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
     body {
       background: linear-gradient(-45deg, #ff9a9e, #fecfef, #a1c4fd, #c2e9fb);
-      background-size: 400% 400%; animation: gradientBG 15s ease infinite;
+      background-size: 400% 400%; animation: gradientBG 12s ease infinite;
       min-height: 100vh; display: flex; justify-content: center; align-items: center; text-align: center;
       overflow: hidden; position: relative;
     }
     @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
+    .bg-heart {
+      position: absolute; color: rgba(255, 105, 180, 0.4); font-size: 1.5rem;
+      animation: floatUp 7s linear infinite; pointer-events: none;
+    }
+    @keyframes floatUp {
+      0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
+      50% { opacity: 0.8; }
+      100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+    }
+
     .container {
-      width: 88%; max-width: 380px; padding: 30px 20px; background: rgba(255, 255, 255, 0.5);
-      border-radius: 25px; backdrop-filter: blur(15px); border: 2px solid rgba(255, 255, 255, 0.7);
-      box-shadow: 0 10px 30px rgba(255, 182, 193, 0.3); z-index: 10;
+      width: 88%; max-width: 380px; padding: 30px 20px; background: rgba(255, 255, 255, 0.6);
+      border-radius: 25px; backdrop-filter: blur(15px); border: 2px solid rgba(255, 255, 255, 0.8);
+      box-shadow: 0 10px 30px rgba(255, 182, 193, 0.4); z-index: 10;
     }
     h2 { color: #ff477e; margin-bottom: 10px; }
     p { color: #555; font-size: 0.95rem; }
     
-    .cake-wrapper { position: relative; width: 180px; margin: 40px auto 20px; }
-    .cake-img { width: 100%; display: block; filter: drop-shadow(0 8px 15px rgba(0,0,0,0.1)); }
+    .cake-wrapper { position: relative; width: 190px; margin: 35px auto 20px; }
+    .cake-img { width: 100%; filter: drop-shadow(0 8px 15px rgba(0,0,0,0.1)); }
     
     .flame-img {
-      position: absolute; top: -15px; left: 50%; transform: translateX(-50%);
-      width: 25px; cursor: pointer; animation: flicker 0.6s infinite alternate;
+      position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
+      width: 22px; cursor: pointer; animation: flicker 0.6s infinite alternate;
     }
-    @keyframes flicker { 0% { transform: translateX(-50%) scale(1); } 100% { transform: translateX(-50%) scale(1.2); } }
+    @keyframes flicker { 0% { transform: translateX(-50%) scale(1); } 100% { transform: translateX(-50%) scale(1.25); } }
     
     .btn {
       background: linear-gradient(45deg, #ff758c, #ff7eb3); border: none; color: white;
@@ -37,25 +48,31 @@
       box-shadow: 0 5px 15px rgba(255, 117, 140, 0.4);
     }
 
-    /* Falling text styling */
-    .rain-item {
-      position: absolute; top: -50px; color: #ff477e; font-weight: bold;
-      font-size: 1.2rem; pointer-events: none; animation: fall 3.5s linear forwards;
-      z-index: 100; text-shadow: 0 2px 5px rgba(255,255,255,0.8);
+    .rain-drop {
+      position: fixed; top: -60px; color: #ff3366; font-weight: 800;
+      font-size: 1.1rem; pointer-events: none; animation: fallStraight 3s linear forwards;
+      z-index: 100; text-shadow: 0 0 8px rgba(255,255,255,1), 0 0 12px rgba(255, 71, 126, 0.8);
+      white-space: nowrap;
     }
-    @keyframes fall {
-      to { transform: translateY(105vh) rotate(360deg); opacity: 0; }
+    @keyframes fallStraight {
+      0% { transform: translateY(0); opacity: 1; }
+      80% { opacity: 1; }
+      100% { transform: translateY(110vh); opacity: 0; }
     }
   </style>
 </head>
 <body>
 
+  <div class="bg-heart" style="left: 10%; animation-delay: 0s;">💖</div>
+  <div class="bg-heart" style="left: 40%; animation-delay: 3s;">✨</div>
+  <div class="bg-heart" style="left: 75%; animation-delay: 1.5s;">💕</div>
+
   <div class="container">
     <h2>🎂 Blow Out The Candle!</h2>
-    <p>Tap the candle flame to blow it out and make a wish!</p>
+    <p>Tap the candle flame to blow breeze & make a wish!</p>
     
     <div class="cake-wrapper">
-      <img src="https://cdn-icons-png.flaticon.com/512/3132/3132693.png" class="cake-img" alt="Cute Cake">
+      <img src="https://images.vexels.com/media/users/3/145880/isolated/preview/26e38e12d4d8ef85bc397f25902b130e-cute-birthday-cake-illustration.png" class="cake-img" alt="Birthday Cake">
       <img src="https://cdn-icons-png.flaticon.com/512/785/785116.png" id="flame" class="flame-img" onclick="blowCandle()" alt="Candle Flame">
     </div>
 
@@ -67,27 +84,24 @@
 
   <script>
     function blowCandle() {
-      // Play blow audio effect
-      let blowAudio = new Audio('https://assets.mixkit.co/active_storage/sfx/2578/2578-preview.mp3');
-      blowAudio.play();
+      let breezeAudio = new Audio('https://assets.mixkit.co/active_storage/sfx/2573/2573-preview.mp3');
+      breezeAudio.play();
 
       document.getElementById('flame').style.display = 'none';
       document.getElementById('nextSection').style.display = 'block';
 
-      // Trigger "Happy birthday ❤️❤️" raining confetti
-      for (let i = 0; i < 30; i++) {
+      for (let i = 0; i < 35; i++) {
         setTimeout(createRainDrop, i * 120);
       }
     }
 
     function createRainDrop() {
       const drop = document.createElement('div');
-      drop.classList.add('rain-item');
+      drop.classList.add('rain-drop');
       drop.innerText = "Happy birthday ❤️❤️";
-      drop.style.left = Math.random() * 80 + 10 + "vw";
-      drop.style.fontSize = (Math.random() * 0.5 + 0.9) + "rem";
+      drop.style.left = Math.random() * 85 + 5 + "vw";
       document.body.appendChild(drop);
-      setTimeout(() => drop.remove(), 3500);
+      setTimeout(() => drop.remove(), 3200);
     }
   </script>
 </body>
