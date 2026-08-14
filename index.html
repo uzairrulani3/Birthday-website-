@@ -3,70 +3,68 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Enter Passcode 🔒</title>
+  <title>A Surprise For You ✨</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', cursive, sans-serif; }
     body {
       background: linear-gradient(-45deg, #ff9a9e, #fecfef, #a1c4fd, #c2e9fb);
-      background-size: 400% 400%; animation: gradientBG 15s ease infinite;
+      background-size: 400% 400%; animation: gradientBG 12s ease infinite;
       min-height: 100vh; display: flex; justify-content: center; align-items: center; text-align: center;
+      overflow: hidden; position: relative;
     }
     @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-    .container {
-      width: 88%; max-width: 380px; padding: 30px 20px; background: rgba(255, 255, 255, 0.5);
-      border-radius: 25px; backdrop-filter: blur(15px); border: 2px solid rgba(255, 255, 255, 0.7);
-      box-shadow: 0 10px 30px rgba(255, 182, 193, 0.3);
+
+    .bg-heart {
+      position: absolute; color: rgba(255, 105, 180, 0.35); font-size: 1.5rem;
+      animation: floatUp 8s linear infinite; pointer-events: none;
     }
-    h2 { color: #ff477e; margin-bottom: 10px; font-size: 1.5rem; }
-    p { color: #555; margin-bottom: 20px; font-size: 0.95rem; }
-    .pin-display { font-size: 2.2rem; letter-spacing: 12px; margin-bottom: 20px; min-height: 45px; color: #ff477e; font-weight: bold; }
-    .keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; max-width: 250px; margin: 0 auto; }
-    .key {
-      background: rgba(255, 255, 255, 0.8); border: 1px solid rgba(255, 182, 193, 0.5);
-      color: #ff477e; font-size: 1.3rem; padding: 15px; border-radius: 50%; cursor: pointer;
-      font-weight: bold; transition: 0.2s; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    @keyframes floatUp {
+      0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
+      50% { opacity: 0.8; }
+      100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
     }
-    .key:hover { background: #ff758c; color: white; transform: scale(1.08); }
+
+    .card {
+      background: rgba(255, 255, 255, 0.65); padding: 40px 25px; border-radius: 30px;
+      backdrop-filter: blur(15px); border: 2px solid rgba(255, 255, 255, 0.8);
+      box-shadow: 0 15px 35px rgba(255, 182, 193, 0.4); max-width: 350px; width: 85%; z-index: 10;
+    }
+    h1 { color: #ff477e; font-size: 1.8rem; margin-bottom: 15px; }
+    p { color: #6c5ce7; font-size: 1rem; margin-bottom: 25px; font-weight: 600; }
+    .start-btn {
+      background: linear-gradient(45deg, #ff758c, #ff7eb3); border: none; color: white;
+      padding: 15px 35px; border-radius: 30px; font-size: 1.2rem; font-weight: bold; cursor: pointer;
+      box-shadow: 0 8px 20px rgba(255, 117, 140, 0.5); transition: transform 0.2s;
+    }
+    .start-btn:hover { transform: scale(1.08); }
   </style>
 </head>
 <body>
 
-  <div class="container">
-    <h2>🔒 Passcode Required</h2>
-    <p>Enter the secret code to open your surprise</p>
-    <div class="pin-display" id="pinDisplay">____</div>
-    <div class="keypad">
-      <button class="key" onclick="pressKey('1')">1</button>
-      <button class="key" onclick="pressKey('2')">2</button>
-      <button class="key" onclick="pressKey('3')">3</button>
-      <button class="key" onclick="pressKey('4')">4</button>
-      <button class="key" onclick="pressKey('5')">5</button>
-      <button class="key" onclick="pressKey('6')">6</button>
-      <button class="key" onclick="pressKey('7')">7</button>
-      <button class="key" onclick="pressKey('8')">8</button>
-      <button class="key" onclick="pressKey('9')">9</button>
-      <button class="key" onclick="clearPin()">C</button>
-      <button class="key" onclick="pressKey('0')">0</button>
-      <button class="key" onclick="checkPin()">✓</button>
-    </div>
+  <div class="bg-heart" style="left: 10%; animation-delay: 0s;">💖</div>
+  <div class="bg-heart" style="left: 30%; animation-delay: 2s;">✨</div>
+  <div class="bg-heart" style="left: 50%; animation-delay: 4s;">🌸</div>
+  <div class="bg-heart" style="left: 70%; animation-delay: 1s;">💕</div>
+  <div class="bg-heart" style="left: 85%; animation-delay: 3s;">✨</div>
+
+  <div class="card">
+    <h1>🎁 A Special Gift</h1>
+    <p>Turn on your sound & tap below to unlock!</p>
+    <button class="start-btn" onclick="startSurprise()">Tap to Begin ✨</button>
   </div>
 
-  <script>
-    let currentPin = "";
-    const correctPin = "3108";
+  <audio id="bgSong" loop preload="auto">
+    <source src="music/birthday.mp3" type="audio/mpeg">
+  </audio>
 
-    function pressKey(num) {
-      if (currentPin.length < 4) { currentPin += num; updateDisplay(); }
-    }
-    function clearPin() { currentPin = ""; updateDisplay(); }
-    function updateDisplay() { document.getElementById('pinDisplay').innerText = currentPin.padEnd(4, '_'); }
-    function checkPin() {
-      if (currentPin === correctPin) {
-        window.location.href = "cake.html";
-      } else {
-        alert("Incorrect PIN! Try again ❤️");
-        clearPin();
-      }
+  <script>
+    function startSurprise() {
+      const audio = document.getElementById('bgSong');
+      audio.play().then(() => {
+        window.location.href = "passcode.html";
+      }).catch(() => {
+        window.location.href = "passcode.html";
+      });
     }
   </script>
 </body>
