@@ -13,16 +13,19 @@
     .container {
       width: 90%; max-width: 400px; padding: 25px 20px; background: rgba(255, 255, 255, 0.08);
       border-radius: 20px; backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
     h2 { color: #ffd1dc; margin-bottom: 15px; }
     .card { background: rgba(255,255,255,0.1); padding: 12px; border-radius: 15px; margin-bottom: 15px; }
-    .card img { width: 100%; height: 250px; object-fit: cover; border-radius: 10px; }
-    .caption { margin-top: 10px; font-size: 0.95rem; color: #f0f0f0; }
+    .card img { width: 100%; height: 260px; object-fit: cover; border-radius: 10px; }
+    .caption { margin-top: 10px; font-size: 0.95rem; color: #f0f0f0; min-height: 45px; display: flex; align-items: center; justify-content: center; }
     .btn {
       background: linear-gradient(45deg, #ff758c, #ff7eb3); border: none; color: white;
       padding: 12px 25px; border-radius: 25px; font-weight: bold; cursor: pointer;
-      text-decoration: none; display: inline-block; margin: 5px;
+      text-decoration: none; display: inline-block; margin: 5px; box-shadow: 0 4px 15px rgba(255,117,140,0.4);
+      transition: transform 0.2s;
     }
+    .btn:hover { transform: scale(1.05); }
   </style>
 </head>
 <body>
@@ -30,7 +33,7 @@
   <div class="container">
     <h2>📸 Cute Memories</h2>
     <div class="card">
-      <img id="photo" src="photo1.jpg" alt="Memory" onerror="this.src='https://via.placeholder.com/300x250?text=Add+photo1.jpg+here'">
+      <img id="photo" src="images/photo1.jpg" alt="Memory" onerror="this.src='https://via.placeholder.com/300x250?text=Photo+Not+Found'">
       <p class="caption" id="caption">Quiet moments holding you close. ❤️</p>
     </div>
 
@@ -41,9 +44,13 @@
 
   <script>
     const photos = [
-      { src: "photo1.jpg", text: "Quiet moments holding you close. ❤️" },
-      { src: "photo2.jpg", text: "Cooking together and laughing at our mess. 🍝" },
-      { src: "photo3.jpg", text: "Ice cream on a sunny afternoon stroll. 🍦" }
+      { src: "images/photo1.jpg", text: "Quiet moments holding you close. ❤️" },
+      { src: "images/photo2.jpg", text: "Cooking together and laughing at our mess. 🍝" },
+      { src: "images/photo3.jpg", text: "Ice cream on a sunny afternoon stroll. 🍦" },
+      { src: "images/photo4.jpg", text: "Late night drives and endless talks. 🚗" },
+      { src: "images/photo5.jpg", text: "Making golden memories every single day. ✨" },
+      { src: "images/photo6.jpg", text: "Always laughing together no matter what. 😊" },
+      { src: "images/photo7.jpg", text: "Here's to many more beautiful years! 🎉" }
     ];
     let index = 0;
 
