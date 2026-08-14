@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Our Song 🎵</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<div class="page player-page">
+
+    <div class="music-heart">
+        💗
+    </div>
+
+    <h1>Our Song 🎵</h1>
+
+    <p class="subtitle">
+        A little song for you ❤️
+    </p>
+
+    <div class="music-card">
+
+        <img src="images/photo1.jpg"
+             alt="Us"
+             class="music-photo">
+
+        <h2>For My Favourite Person ❤️</h2>
+
+        <p>Press play and listen with me.</p>
+
+        <audio id="birthdaySong"
+               controls
+               preload="auto">
+
+            <source src="music/birthday.mp3"
+                    type="audio/mpeg">
+
+            Your browser does not support audio.
+
+        </audio>
+
+        <button
+            class="main-button"
+            onclick="playSong()">
+
+            ▶ Play Song
+        </button>
+
+    </div>
+
+    <a href="gifts.html" class="back-button">
+        ← Back to gifts
+    </a>
+
+</div>
+
+
+<script>
+
+function playSong() {
+
+    const song =
+        document.getElementById("birthdaySong");
+
+    song.play()
+        .catch(() => {
+
+            alert(
+                "Tap the play button on the music player ❤️"
+            );
+
+        });
+
+}
+
+</script>
+
+</body>
+</html>
