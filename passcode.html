@@ -3,8 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Comfortaa', cursive, sans-serif; }
     body {
       background: linear-gradient(-45deg, #ff9a9e, #fecfef, #a1c4fd, #c2e9fb);
       background-size: 400% 400%; animation: gradientBG 12s ease infinite;
@@ -13,7 +15,6 @@
     }
     @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
-    /* Floating Hearts Background */
     .bg-heart {
       position: absolute; bottom: -30px; font-size: 1.2rem; pointer-events: none;
       animation: floatUp 6s linear infinite; opacity: 0.7; z-index: 1;
@@ -24,25 +25,33 @@
     }
 
     .container {
-      width: 88%; max-width: 360px; padding: 25px 20px; background: rgba(255, 255, 255, 0.65);
-      border-radius: 25px; backdrop-filter: blur(15px); border: 2px solid rgba(255, 255, 255, 0.8);
-      box-shadow: 0 10px 30px rgba(255, 182, 193, 0.4); z-index: 10;
+      width: 88%; max-width: 360px; padding: 30px 20px;
+      background: rgba(255, 255, 255, 0.45); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-radius: 30px; border: 1.5px solid rgba(255, 255, 255, 0.8);
+      box-shadow: 0 20px 40px rgba(255, 105, 180, 0.2); z-index: 10;
     }
-    h2 { color: #ff477e; margin-bottom: 5px; font-size: 1.4rem; }
-    p { color: #555; margin-bottom: 12px; font-size: 0.9rem; }
-    .pin-display { font-size: 2rem; letter-spacing: 10px; margin-bottom: 15px; min-height: 38px; color: #ff477e; font-weight: bold; }
-    .keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; max-width: 240px; margin: 0 auto; }
+    h2 { color: #ff477e; margin-bottom: 6px; font-size: 1.4rem; }
+    p { color: #6c5ce7; margin-bottom: 15px; font-size: 0.88rem; }
+    .pin-display { font-size: 2rem; letter-spacing: 10px; margin-bottom: 18px; min-height: 40px; color: #ff477e; font-weight: bold; }
+    
+    .keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; max-width: 240px; margin: 0 auto; }
     .key {
-      background: rgba(255, 255, 255, 0.9); border: 1px solid rgba(255, 182, 193, 0.5);
-      color: #ff477e; font-size: 1.2rem; padding: 12px; border-radius: 50%; cursor: pointer;
-      font-weight: bold; transition: 0.2s; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      background: rgba(255, 255, 255, 0.85); border: 1px solid rgba(255, 182, 193, 0.6);
+      color: #ff477e; font-size: 1.25rem; padding: 14px; border-radius: 50%; cursor: pointer;
+      font-weight: bold; transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 4px 12px rgba(255, 105, 180, 0.15);
     }
-    .key:active { background: #ff758c; color: white; transform: scale(0.95); }
+    .key:active { transform: scale(0.88); background: #ff758c; color: white; }
   </style>
 </head>
 <body>
+
+  <!-- Custom SFX Audio -->
+  <audio id="clickSfx" src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3" preload="auto"></audio>
+  <audio id="magicSfx" src="https://assets.mixkit.co/active_storage/sfx/2014/2014-preview.mp3" preload="auto"></audio>
+
   <div class="container">
-    <h2>🔒 Passcode Required</h2>
+    <h2>🔒 Secret Passcode</h2>
     <p>Enter secret code to unlock</p>
     <div class="pin-display" id="pinDisplay">____</div>
     <div class="keypad">
@@ -65,21 +74,30 @@
     let currentPin = "";
     const correctPin = "3108";
 
+    function playClick() {
+      const audio = document.getElementById('clickSfx');
+      audio.currentTime = 0;
+      audio.play().catch(e => {});
+    }
+
     function pressKey(num) {
+      playClick();
       if (currentPin.length < 4) { currentPin += num; updateDisplay(); }
     }
-    function clearPin() { currentPin = ""; updateDisplay(); }
+    function clearPin() { playClick(); currentPin = ""; updateDisplay(); }
     function updateDisplay() { document.getElementById('pinDisplay').innerText = currentPin.padEnd(4, '_'); }
+    
     function checkPin() {
       if (currentPin === correctPin) {
-        window.location.href = "cake.html";
+        document.getElementById('magicSfx').play().catch(e => {});
+        confetti({ particleCount: 70, spread: 60, origin: { y: 0.6 } });
+        setTimeout(() => { window.location.href = "cake.html"; }, 800);
       } else {
         alert("Incorrect PIN! Try again ❤️");
         clearPin();
       }
     }
 
-    // Spawn floating background hearts
     function createBgHeart() {
       const h = document.createElement('div');
       h.classList.add('bg-heart');
