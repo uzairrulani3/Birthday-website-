@@ -3,49 +3,37 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>A Surprise For You ✨</title>
+  <title>Enter Passcode 🔒</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
     body {
-      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-      color: #fff; min-height: 100vh; display: flex; justify-content: center; align-items: center; text-align: center; overflow: hidden; position: relative;
+      background: linear-gradient(-45deg, #ff9a9e, #fecfef, #a1c4fd, #c2e9fb);
+      background-size: 400% 400%; animation: gradientBG 15s ease infinite;
+      min-height: 100vh; display: flex; justify-content: center; align-items: center; text-align: center;
     }
-    /* Floating Hearts Animation */
-    .heart {
-      position: absolute; color: rgba(255, 182, 193, 0.4); font-size: 20px;
-      animation: float 6s linear infinite; bottom: -100px;
-    }
-    @keyframes float {
-      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-      100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
-    }
+    @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
     .container {
-      width: 90%; max-width: 400px; padding: 30px 20px; background: rgba(255, 255, 255, 0.08);
-      border-radius: 20px; backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.15);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 10;
+      width: 88%; max-width: 380px; padding: 30px 20px; background: rgba(255, 255, 255, 0.5);
+      border-radius: 25px; backdrop-filter: blur(15px); border: 2px solid rgba(255, 255, 255, 0.7);
+      box-shadow: 0 10px 30px rgba(255, 182, 193, 0.3);
     }
-    h2 { color: #ffd1dc; margin-bottom: 10px; }
-    p { color: #e0e0e0; margin-bottom: 20px; font-size: 0.9rem; }
-    .pin-display { font-size: 2.2rem; letter-spacing: 12px; margin-bottom: 20px; min-height: 45px; color: #ff7eb3; }
+    h2 { color: #ff477e; margin-bottom: 10px; font-size: 1.5rem; }
+    p { color: #555; margin-bottom: 20px; font-size: 0.95rem; }
+    .pin-display { font-size: 2.2rem; letter-spacing: 12px; margin-bottom: 20px; min-height: 45px; color: #ff477e; font-weight: bold; }
     .keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; max-width: 250px; margin: 0 auto; }
     .key {
-      background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2);
-      color: white; font-size: 1.2rem; padding: 15px; border-radius: 50%; cursor: pointer; transition: 0.2s;
+      background: rgba(255, 255, 255, 0.8); border: 1px solid rgba(255, 182, 193, 0.5);
+      color: #ff477e; font-size: 1.3rem; padding: 15px; border-radius: 50%; cursor: pointer;
+      font-weight: bold; transition: 0.2s; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
     }
-    .key:hover { background: rgba(255, 255, 255, 0.3); transform: scale(1.05); }
+    .key:hover { background: #ff758c; color: white; transform: scale(1.08); }
   </style>
 </head>
 <body>
 
-  <!-- Floating background hearts -->
-  <div class="heart" style="left: 10%; animation-duration: 7s;">💖</div>
-  <div class="heart" style="left: 30%; animation-duration: 5s;">✨</div>
-  <div class="heart" style="left: 60%; animation-duration: 8s;">💕</div>
-  <div class="heart" style="left: 80%; animation-duration: 6s;">✨</div>
-
   <div class="container">
-    <h2>🔒 Secret Unlock</h2>
-    <p>Enter the secret PIN to open your gift!</p>
+    <h2>🔒 Passcode Required</h2>
+    <p>Enter the secret code to open your surprise</p>
     <div class="pin-display" id="pinDisplay">____</div>
     <div class="keypad">
       <button class="key" onclick="pressKey('1')">1</button>
@@ -61,12 +49,11 @@
       <button class="key" onclick="pressKey('0')">0</button>
       <button class="key" onclick="checkPin()">✓</button>
     </div>
-    <p style="margin-top: 15px; font-size: 0.8rem; opacity: 0.6;">(Demo PIN: 1234)</p>
   </div>
 
   <script>
     let currentPin = "";
-    const correctPin = "1234";
+    const correctPin = "3108";
 
     function pressKey(num) {
       if (currentPin.length < 4) { currentPin += num; updateDisplay(); }
@@ -77,7 +64,7 @@
       if (currentPin === correctPin) {
         window.location.href = "cake.html";
       } else {
-        alert("Incorrect PIN! Try 1234");
+        alert("Incorrect PIN! Try again ❤️");
         clearPin();
       }
     }
