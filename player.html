@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>A Letter For You 💌</title>
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Comfortaa:wght@700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
@@ -11,8 +12,8 @@
       font-family: 'Comfortaa', cursive, sans-serif;
       background: linear-gradient(-45deg, #ff9a9e, #fecfef, #a1c4fd, #c2e9fb);
       background-size: 400% 400%; animation: gradientBG 12s ease infinite;
-      min-height: 100vh; display: flex; justify-content: center; align-items: center; text-align: center;
-      overflow: hidden; position: relative; padding: 20px 0;
+      min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
+      text-align: center; overflow: hidden; position: relative; padding: 20px 0;
     }
     @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
@@ -30,28 +31,74 @@
       background: rgba(255, 255, 255, 0.45); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
       border-radius: 30px; border: 1.5px solid rgba(255, 255, 255, 0.8);
       box-shadow: 0 20px 40px rgba(255, 105, 180, 0.2); z-index: 10;
+      display: flex; flex-direction: column; align-items: center;
     }
 
-    /* Beautiful Letter Card */
-    .letter-card {
-      background: #ffffff; padding: 22px 18px; border-radius: 18px;
-      box-shadow: 0 10px 25px rgba(255, 182, 193, 0.4); border: 1px solid #ffe4e1;
-      text-align: left; animation: slideUp 0.6s ease forwards;
+    h2 { color: #ff477e; margin-bottom: 12px; font-size: 1.3rem; }
+
+    /* Envelope Container */
+    .envelope-wrapper {
+      position: relative; width: 240px; height: 160px;
+      background: #ff758c; border-radius: 0 0 15px 15px;
+      box-shadow: 0 10px 25px rgba(255, 117, 140, 0.35);
+      cursor: pointer; margin: 30px auto 10px; perspective: 800px;
+      transition: transform 0.3s ease;
     }
-    @keyframes slideUp { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
+    .envelope-wrapper:active { transform: scale(0.96); }
+
+    /* Envelope Top Flap */
+    .flap {
+      position: absolute; top: 0; left: 0; width: 0; height: 0;
+      border-left: 120px solid transparent; border-right: 120px solid transparent;
+      border-top: 95px solid #ff5277; transform-origin: top;
+      transition: transform 0.5s ease-in-out, z-index 0.2s ease; z-index: 5;
+    }
+
+    /* Envelope Pocket (Front Cover) */
+    .pocket {
+      position: absolute; bottom: 0; left: 0; width: 0; height: 0;
+      border-left: 120px solid #ff8fa3; border-right: 120px solid #ff8fa3;
+      border-bottom: 85px solid #ff758c; border-radius: 0 0 15px 15px;
+      z-index: 4;
+    }
+
+    /* Letter Inside Envelope */
+    .letter {
+      position: absolute; bottom: 10px; left: 15px; width: 210px; height: 135px;
+      background: #ffffff; border-radius: 10px; padding: 15px 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1); text-align: left;
+      transition: transform 0.6s ease-in-out, height 0.6s ease-in-out, z-index 0.1s ease;
+      z-index: 3; overflow: hidden;
+    }
 
     .letter-content {
-      font-family: 'Caveat', cursive; color: #4a4a4a; line-height: 1.55; font-size: 1.25rem;
+      font-family: 'Caveat', cursive; color: #4a4a4a; line-height: 1.5; font-size: 1.15rem;
+      opacity: 0.6; transition: opacity 0.4s ease 0.3s;
     }
-    .letter-content p { margin-bottom: 10px; }
-    .signature { text-align: right; font-weight: bold; color: #ff477e; margin-top: 12px; font-size: 1.4rem; }
-    
+    .letter-content p { margin-bottom: 8px; }
+    .signature { text-align: right; font-weight: bold; color: #ff477e; margin-top: 8px; font-size: 1.3rem; }
+
+    /* Open State Animations */
+    .envelope-wrapper.open .flap {
+      transform: rotateX(180deg); z-index: 1;
+    }
+    .envelope-wrapper.open .letter {
+      transform: translateY(-90px); height: 280px; z-index: 6;
+    }
+    .envelope-wrapper.open .letter-content { opacity: 1; }
+
+    .hint-text {
+      color: #ff477e; font-size: 0.85rem; font-weight: bold; margin-top: 8px; transition: opacity 0.3s;
+    }
+
     .btn {
       background: linear-gradient(45deg, #ff758c, #ff7eb3); border: none; color: white;
       padding: 12px 28px; border-radius: 30px; font-weight: bold; cursor: pointer;
-      text-decoration: none; display: inline-block; margin-top: 20px;
-      box-shadow: 0 8px 20px rgba(255, 117, 140, 0.4); transition: transform 0.2s;
+      text-decoration: none; display: inline-block; margin-top: 15px;
+      box-shadow: 0 8px 20px rgba(255, 117, 140, 0.4); transition: transform 0.2s, opacity 0.3s;
+      opacity: 0; pointer-events: none;
     }
+    .btn.show { opacity: 1; pointer-events: auto; }
     .btn:active { transform: scale(0.92); }
   </style>
 </head>
@@ -60,24 +107,50 @@
   <audio id="sparkleSfx" src="https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3" preload="auto"></audio>
 
   <div class="container">
-    <div class="letter-card">
-      <div class="letter-content">
-        <p><strong>Happy Birthday, Cutiepie! 🎉✨</strong></p>
-        <p>I built this little corner of the internet just for you, because a normal card felt far too small to hold all the happiness you bring into my life.</p>
-        <p>Thank you for all the golden memories, late-night laughs, silly jokes, and every ordinary day you quietly make extraordinary.</p>
-        <p>Here’s to another wonderful year full of magic, smiles, and endless adventures!</p>
-        <div class="signature">With all my love, always ❤️</div>
+    <h2>💌 A Special Letter</h2>
+
+    <div class="envelope-wrapper" id="envelope" onclick="openEnvelope()">
+      <div class="flap"></div>
+      <div class="pocket"></div>
+      <div class="letter">
+        <div class="letter-content">
+          <p><strong>Happy Birthday, Cutiepie! 🎉✨</strong></p>
+          <p>I built this little corner of the internet just for you, because a normal card felt far too small to hold all the happiness you bring into my life.</p>
+          <p>Thank you for all the golden memories, late-night laughs, silly jokes, and every ordinary day you quietly make extraordinary.</p>
+          <p>Here’s to another wonderful year full of magic, smiles, and endless adventures!</p>
+          <div class="signature">With all my love, always ❤️</div>
+        </div>
       </div>
     </div>
 
-    <a href="passcode.html" class="btn">Replay Surprise 🔄</a>
+    <p class="hint-text" id="hint">Tap envelope to open 📩</p>
+
+    <a href="passcode.html" class="btn" id="replayBtn">Replay Surprise 🔄</a>
   </div>
 
   <script>
-    window.onload = function() {
+    let isOpen = false;
+
+    function openEnvelope() {
+      if (isOpen) return;
+      isOpen = true;
+
+      if (navigator.vibrate) navigator.vibrate([60, 40, 60]);
+
       document.getElementById('sparkleSfx').play().catch(e => {});
-      confetti({ particleCount: 90, spread: 70, origin: { y: 0.6 } });
-    };
+      
+      const envelope = document.getElementById('envelope');
+      const hint = document.getElementById('hint');
+      const replayBtn = document.getElementById('replayBtn');
+
+      envelope.classList.add('open');
+      hint.style.opacity = '0';
+
+      setTimeout(() => {
+        confetti({ particleCount: 90, spread: 70, origin: { y: 0.6 } });
+        replayBtn.classList.add('show');
+      }, 500);
+    }
 
     function createBgHeart() {
       const h = document.createElement('div');
