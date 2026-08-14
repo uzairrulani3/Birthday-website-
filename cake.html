@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blow the Candles 🎂</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+    body {
+      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      color: #fff; min-height: 100vh; display: flex; justify-content: center; align-items: center; text-align: center;
+    }
+    .container {
+      width: 90%; max-width: 400px; padding: 30px 20px; background: rgba(255, 255, 255, 0.08);
+      border-radius: 20px; backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+    h2 { color: #ffd1dc; margin-bottom: 10px; }
+    .cake {
+      width: 150px; height: 100px; background: #f48fb1; border-radius: 10px 10px 0 0;
+      margin: 50px auto 30px; position: relative; box-shadow: inset 0 -10px 0 #ec407a;
+    }
+    .cake::before {
+      content: ''; position: absolute; top: -20px; left: 0; width: 100%; height: 20px;
+      background: #f8bbd0; border-radius: 10px 10px 0 0;
+    }
+    .candle { width: 12px; height: 35px; background: #fff; position: absolute; top: -55px; left: 50%; transform: translateX(-50%); border-radius: 3px; }
+    .flame {
+      width: 14px; height: 20px; background: #ff9800; border-radius: 50% 50% 20% 20%;
+      position: absolute; top: -20px; left: -1px; box-shadow: 0 0 15px #ff9800;
+      animation: flicker 0.6s infinite alternate; cursor: pointer;
+    }
+    .flame.off { display: none; }
+    @keyframes flicker { 0% { transform: scale(1); } 100% { transform: scale(1.2); } }
+    .btn {
+      background: linear-gradient(45deg, #ff758c, #ff7eb3); border: none; color: white;
+      padding: 12px 25px; border-radius: 25px; font-weight: bold; cursor: pointer;
+      text-decoration: none; display: inline-block; margin-top: 15px; box-shadow: 0 4px 15px rgba(255,117,140,0.4);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>🎉 Happy Birthday! 🎉</h2>
+    <p>Tap the candle flame to blow it out and make a wish!</p>
+    
+    <div class="cake">
+      <div class="candle">
+        <div class="flame" id="flame" onclick="blowOut()"></div>
+      </div>
+    </div>
+
+    <div id="nextSection" style="display: none;">
+      <p style="color: #ffd1dc; margin-bottom: 15px;">✨ Wish sent to the stars! ✨</p>
+      <a href="memories.html" class="btn">See Our Memories ➔</a>
+    </div>
+  </div>
+
+  <script>
+    function blowOut() {
+      document.getElementById('flame').classList.add('off');
+      document.getElementById('nextSection').style.display = 'block';
+    }
+  </script>
+</body>
+</html>
