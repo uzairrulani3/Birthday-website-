@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pop the Wishes 🎈</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+    body {
+      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      color: #fff; min-height: 100vh; display: flex; justify-content: center; align-items: center; text-align: center;
+    }
+    .container {
+      width: 90%; max-width: 400px; padding: 30px 20px; background: rgba(255, 255, 255, 0.08);
+      border-radius: 20px; backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+    h2 { color: #ffd1dc; margin-bottom: 15px; }
+    .balloon-box { display: flex; justify-content: space-around; margin: 30px 0; }
+    .balloon {
+      width: 50px; height: 65px; border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+      cursor: pointer; position: relative; transition: transform 0.2s;
+    }
+    .balloon::after { content: '📍'; position: absolute; bottom: -12px; left: 17px; font-size: 10px; }
+    .balloon.popped { visibility: hidden; }
+    .wish-display { min-height: 40px; color: #ffd1dc; font-style: italic; margin-bottom: 20px; }
+    .btn {
+      background: linear-gradient(45deg, #ff758c, #ff7eb3); border: none; color: white;
+      padding: 12px 25px; border-radius: 25px; font-weight: bold; cursor: pointer; text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>🎈 Pop a Wish</h2>
+    <p>Tap a balloon to unlock a hidden message!</p>
+
+    <div class="balloon-box">
+      <div class="balloon" style="background: #ff758c;" onclick="pop(this, 'You bring so much warmth to my life! ✨')"></div>
+      <div class="balloon" style="background: #ff7eb3;" onclick="pop(this, 'Wishing you happiness today & forever! 💕')"></div>
+      <div class="balloon" style="background: #a88beb;" onclick="pop(this, 'Keep shining bright as always! 🌟')"></div>
+    </div>
+
+    <div class="wish-display" id="wishText">Select a balloon...</div>
+
+    <a href="player.html" class="btn">Listen to Song & Letter 🎵</a>
+  </div>
+
+  <script>
+    function pop(element, text) {
+      element.classList.add('popped');
+      document.getElementById('wishText').innerText = text;
+    }
+  </script>
+</body>
+</html>
