@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&display=swap" rel="stylesheet">
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Comfortaa', cursive, sans-serif; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Comfortaa', cursive, sans-serif; user-select: none; }
     body {
       background: linear-gradient(-45deg, #ff9a9e, #fecfef, #a1c4fd, #c2e9fb);
       background-size: 400% 400%; animation: gradientBG 12s ease infinite;
@@ -48,8 +48,7 @@
     .btn {
       background: linear-gradient(45deg, #ff758c, #ff7eb3); border: none; color: white;
       padding: 12px 28px; border-radius: 30px; font-weight: bold; cursor: pointer; text-decoration: none; display: inline-block;
-      box-shadow: 0 8px 20px rgba(255, 117, 140, 0.4);
-      transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 8px 20px rgba(255, 117, 140, 0.4); transition: transform 0.2s;
     }
     .btn:active { transform: scale(0.92); }
   </style>
@@ -63,18 +62,19 @@
     <p>Tap a balloon to unlock sweet wishes ✨</p>
 
     <div class="balloon-box">
-      <div class="balloon" style="background: #ff758c;" onclick="pop(this, 'May your life be filled with endless warmth & sweet smiles! ✨🌸')"></div>
+      <div class="balloon" style="background: #ff758c;" onclick="pop(this, 'May your life be filled with warmth & sweet smiles! ✨🌸')"></div>
       <div class="balloon" style="background: #ff7eb3; animation-delay: 0.4s;" onclick="pop(this, 'Wishing you all the happiness & magic in the world! 💕🧸')"></div>
       <div class="balloon" style="background: #a88beb; animation-delay: 0.8s;" onclick="pop(this, 'Always keep shining bright like a sweet star! 🌟💖')"></div>
     </div>
 
     <div class="wish-display" id="wishText">Tap any balloon above...</div>
 
-    <a href="player.html" class="btn">Read My Letter 💌</a>
+    <a href="player.html" class="btn">Open Birthday Gift 🎁</a>
   </div>
 
   <script>
     function pop(element, wish) {
+      if (navigator.vibrate) navigator.vibrate(50);
       const sfx = document.getElementById('popSfx');
       sfx.currentTime = 0;
       sfx.play().catch(e => {});
