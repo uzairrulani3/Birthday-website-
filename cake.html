@@ -2,12 +2,12 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Make a Wish 🎂</title>
   <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Comfortaa', cursive, sans-serif; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Comfortaa', cursive, sans-serif; user-select: none; }
     body {
       background: linear-gradient(-45deg, #ff9a9e, #fecfef, #a1c4fd, #c2e9fb);
       background-size: 400% 400%; animation: gradientBG 12s ease infinite;
@@ -69,7 +69,7 @@
     }
     @keyframes fallSlow {
       0% { transform: translateY(0); opacity: 1; }
-      100% { transform: translateY(110vh); opacity: 0; }
+      100% { transform: translateY(-110vh); opacity: 0; }
     }
   </style>
 </head>
@@ -88,11 +88,8 @@
       
       <svg class="cake-svg" viewBox="0 0 200 210" xmlns="http://www.w3.org/2000/svg">
         <rect x="94" y="25" width="12" height="35" rx="4" fill="#ff7eb3" stroke="#ffffff" stroke-width="2" />
-        <path d="M94,33 L106,37 M94,43 L106,47" stroke="#ffffff" stroke-width="2" />
         <ellipse cx="100" cy="180" rx="90" ry="14" fill="#e2e8f0" />
-        <ellipse cx="100" cy="177" rx="82" ry="10" fill="#ffffff" />
         <rect x="25" y="125" width="150" height="45" rx="10" fill="#ff9a9e" />
-        <rect x="25" y="120" width="150" height="12" fill="#6c5ce7" opacity="0.15" />
         <rect x="35" y="80" width="130" height="45" rx="10" fill="#fecfef" />
         <path d="M35,80 Q45,100 55,80 Q65,105 75,80 Q85,100 95,80 Q105,108 115,80 Q125,100 135,80 Q145,105 155,80 Q165,95 165,80 L165,75 L35,75 Z" fill="#ffffff" />
         <circle cx="50" cy="73" r="8" fill="#ff3366" />
@@ -113,6 +110,7 @@
     function blowCandle() {
       if (candleBlown) return;
       candleBlown = true;
+      if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
 
       document.getElementById('magicSfx').play().catch(e => {});
       document.getElementById('flameArea').style.display = 'none';
