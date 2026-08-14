@@ -13,6 +13,7 @@
     .container {
       width: 90%; max-width: 400px; padding: 25px 20px; background: rgba(255, 255, 255, 0.08);
       border-radius: 20px; backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
     h2 { color: #ffd1dc; margin-bottom: 15px; }
     
@@ -21,8 +22,8 @@
       background: rgba(0, 0, 0, 0.25); padding: 15px; border-radius: 15px; margin-bottom: 20px;
       border: 1px solid rgba(255, 255, 255, 0.1);
     }
-    .music-icon { font-size: 2rem; margin-bottom: 5px; animation: pulse 1.5s infinite alternate; }
-    @keyframes pulse { 0% { transform: scale(1); } 100% { transform: scale(1.1); } }
+    .music-icon { font-size: 2.2rem; margin-bottom: 5px; animation: pulse 1.5s infinite alternate; }
+    @keyframes pulse { 0% { transform: scale(1); } 100% { transform: scale(1.15); } }
     audio { width: 100%; margin-top: 10px; border-radius: 10px; }
 
     /* Letter Box */
@@ -33,8 +34,8 @@
     }
     .btn {
       background: linear-gradient(45deg, #ff758c, #ff7eb3); border: none; color: white;
-      padding: 10px 20px; border-radius: 25px; font-weight: bold; cursor: pointer;
-      text-decoration: none; display: inline-block; margin-top: 20px;
+      padding: 10px 22px; border-radius: 25px; font-weight: bold; cursor: pointer;
+      text-decoration: none; display: inline-block; margin-top: 20px; box-shadow: 0 4px 15px rgba(255,117,140,0.4);
     }
   </style>
 </head>
@@ -43,12 +44,12 @@
   <div class="container">
     <h2>🎵 Birthday Song</h2>
     
-    <!-- Custom Audio Player -->
+    <!-- Audio Player linked to music/birthday.mp3 -->
     <div class="player-card">
       <div class="music-icon">🎶</div>
       <p style="color: #ff7eb3; font-weight: bold;">Playing: Birthday Surprise</p>
       <audio controls autoplay loop>
-        <source src="birthday.mp3" type="audio/mpeg">
+        <source src="music/birthday.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
       </audio>
     </div>
