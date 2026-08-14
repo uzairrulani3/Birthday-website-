@@ -10,51 +10,65 @@
       background: linear-gradient(-45deg, #ff9a9e, #fecfef, #a1c4fd, #c2e9fb);
       background-size: 400% 400%; animation: gradientBG 12s ease infinite;
       min-height: 100vh; display: flex; justify-content: center; align-items: center; text-align: center;
-      overflow: hidden;
+      overflow: hidden; position: relative;
     }
     @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
+    /* Floating Background Hearts */
+    .bg-heart {
+      position: absolute; bottom: -30px; font-size: 1.2rem; pointer-events: none;
+      animation: floatUp 6s linear infinite; opacity: 0.7; z-index: 1;
+    }
+    @keyframes floatUp {
+      0% { transform: translateY(0) scale(0.8) rotate(0deg); opacity: 0.8; }
+      100% { transform: translateY(-105vh) scale(1.3) rotate(360deg); opacity: 0; }
+    }
+
     .container {
-      width: 88%; max-width: 380px; padding: 30px 20px; background: rgba(255, 255, 255, 0.6);
+      width: 88%; max-width: 370px; padding: 25px 20px; background: rgba(255, 255, 255, 0.65);
       border-radius: 25px; backdrop-filter: blur(15px); border: 2px solid rgba(255, 255, 255, 0.8);
       box-shadow: 0 10px 30px rgba(255, 182, 193, 0.4); z-index: 10;
     }
-    h2 { color: #ff477e; margin-bottom: 10px; }
+    h2 { color: #ff477e; margin-bottom: 5px; }
     p { color: #555; font-size: 0.95rem; }
     
-    .cake-wrapper { position: relative; width: 170px; margin: 35px auto 15px; }
-    .cake-svg { width: 100%; height: auto; display: block; filter: drop-shadow(0 8px 15px rgba(0,0,0,0.1)); }
+    .cake-wrapper { position: relative; width: 220px; margin: 25px auto 10px; cursor: pointer; }
+    .cake-svg { width: 100%; height: auto; display: block; filter: drop-shadow(0 10px 20px rgba(255,105,180,0.25)); }
 
-    /* Glowing animated flame */
+    /* Enlarged Touch Target Flame */
+    .flame-touch-area {
+      position: absolute; top: 0px; left: 50%; transform: translateX(-50%);
+      width: 60px; height: 60px; z-index: 50; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    }
     .flame {
-      position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
-      width: 22px; height: 32px;
-      background: radial-gradient(ellipse at bottom, #ffffff 0%, #ffeb3b 25%, #ff5722 80%, rgba(255,87,34,0) 100%);
-      border-radius: 50% 50% 20% 20%; cursor: pointer;
+      width: 22px; height: 34px;
+      background: radial-gradient(ellipse at bottom, #ffffff 0%, #ffeb3b 30%, #ff5722 80%, rgba(255,87,34,0) 100%);
+      border-radius: 50% 50% 20% 20%;
       box-shadow: 0 0 20px #ff9800, 0 0 35px #ff5722, 0 0 50px #ffeb3b;
-      animation: flicker 0.6s infinite alternate ease-in-out;
+      animation: flicker 0.5s infinite alternate ease-in-out; pointer-events: none;
     }
     @keyframes flicker {
-      0% { transform: translateX(-50%) scale(1) rotate(-2deg); opacity: 0.95; }
-      100% { transform: translateX(-50%) scale(1.25) rotate(2deg); opacity: 1; box-shadow: 0 0 25px #ff9800, 0 0 45px #ff5722; }
+      0% { transform: scale(1) rotate(-2deg); opacity: 0.95; }
+      100% { transform: scale(1.25) rotate(2deg); opacity: 1; box-shadow: 0 0 25px #ff9800, 0 0 45px #ff5722; }
     }
     
     .btn {
       background: linear-gradient(45deg, #ff758c, #ff7eb3); border: none; color: white;
       padding: 12px 28px; border-radius: 25px; font-weight: bold; cursor: pointer;
-      text-decoration: none; display: inline-block; margin-top: 20px;
+      text-decoration: none; display: inline-block; margin-top: 15px;
       box-shadow: 0 5px 15px rgba(255, 117, 140, 0.4);
     }
 
+    /* Slow Continuous Rain */
     .rain-drop {
-      position: fixed; top: -60px; color: #ff3366; font-weight: 800;
-      font-size: 1.1rem; pointer-events: none; animation: fallStraight 3s linear forwards;
+      position: fixed; top: -50px; color: #ff3366; font-weight: 800;
+      font-size: 1.05rem; pointer-events: none; animation: fallSlow 6s linear forwards;
       z-index: 100; text-shadow: 0 0 8px rgba(255,255,255,1), 0 0 12px rgba(255, 71, 126, 0.8);
       white-space: nowrap;
     }
-    @keyframes fallStraight {
+    @keyframes fallSlow {
       0% { transform: translateY(0); opacity: 1; }
-      80% { opacity: 1; }
+      85% { opacity: 1; }
       100% { transform: translateY(110vh); opacity: 0; }
     }
   </style>
@@ -63,28 +77,37 @@
 
   <div class="container">
     <h2>🎂 Blow Out The Candle!</h2>
-    <p>Tap the glowing candle flame to blow breeze & make a wish!</p>
+    <p>Tap the glowing candle to blow breeze & make a wish!</p>
     
     <div class="cake-wrapper">
-      <!-- Glowing Candle Flame -->
-      <div id="flame" class="flame" onclick="blowCandle()"></div>
+      <!-- Instant Tap Target Flame -->
+      <div id="flameArea" class="flame-touch-area" onclick="blowCandle()" ontouchstart="blowCandle()">
+        <div id="flame" class="flame"></div>
+      </div>
       
-      <!-- Built-in High Quality Cake SVG -->
-      <svg class="cake-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+      <!-- Upgraded Gorgeous 3D-Style Cake SVG -->
+      <svg class="cake-svg" viewBox="0 0 200 210" xmlns="http://www.w3.org/2000/svg">
         <!-- Candle Stick -->
-        <rect x="94" y="18" width="12" height="35" rx="4" fill="#ff7eb3" stroke="#ffffff" stroke-width="2" />
-        <!-- Top Cake Frosting -->
-        <path d="M40,110 C40,85 160,85 160,110 L160,120 C160,130 40,130 40,120 Z" fill="#ffb6c1" />
-        <!-- Cake Base Layer -->
-        <rect x="30" y="115" width="140" height="50" rx="12" fill="#fff0f5" />
-        <path d="M30,135 Q50,148 70,135 T110,135 T150,135 T170,135 L170,120 L30,120 Z" fill="#ff758c" />
-        <!-- Decorative Cream Dots -->
-        <circle cx="50" cy="115" r="6" fill="#ffffff" />
-        <circle cx="85" cy="115" r="6" fill="#ffffff" />
-        <circle cx="115" cy="115" r="6" fill="#ffffff" />
-        <circle cx="150" cy="115" r="6" fill="#ffffff" />
-        <!-- Plate -->
-        <ellipse cx="100" cy="168" rx="85" ry="12" fill="#e2e8f0" />
+        <rect x="94" y="25" width="12" height="35" rx="4" fill="#ff7eb3" stroke="#ffffff" stroke-width="2" />
+        <path d="M94,33 L106,37 M94,43 L106,47" stroke="#ffffff" stroke-width="2" />
+        <!-- Bottom Plate -->
+        <ellipse cx="100" cy="180" rx="90" ry="14" fill="#e2e8f0" />
+        <ellipse cx="100" cy="177" rx="82" ry="10" fill="#ffffff" />
+        <!-- Bottom Cake Layer -->
+        <rect x="25" y="125" width="150" height="45" rx="10" fill="#ff9a9e" />
+        <!-- Middle Chocolate/Cream Layer -->
+        <rect x="25" y="120" width="150" height="12" fill="#6c5ce7" opacity="0.15" />
+        <!-- Top Cake Layer -->
+        <rect x="35" y="80" width="130" height="45" rx="10" fill="#fecfef" />
+        <!-- Dripping Cream Frosting -->
+        <path d="M35,80 Q45,100 55,80 Q65,105 75,80 Q85,100 95,80 Q105,108 115,80 Q125,100 135,80 Q145,105 155,80 Q165,95 165,80 L165,75 L35,75 Z" fill="#ffffff" />
+        <!-- Decorative Strawberries & Cherries -->
+        <circle cx="50" cy="73" r="8" fill="#ff3366" />
+        <circle cx="100" cy="71" r="9" fill="#ff3366" />
+        <circle cx="150" cy="73" r="8" fill="#ff3366" />
+        <circle cx="50" cy="71" r="2" fill="#ffeb3b" />
+        <circle cx="100" cy="69" r="2" fill="#ffeb3b" />
+        <circle cx="150" cy="71" r="2" fill="#ffeb3b" />
       </svg>
     </div>
 
@@ -95,44 +118,41 @@
   </div>
 
   <script>
-    // Smooth, soft wind breeze synthesizer
+    let candleBlown = false;
+
     function playBreezeSound() {
-      const ctx = new (window.AudioContext || window.webkitAudioContext)();
-      const bufferSize = ctx.sampleRate * 1.5;
-      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-      const output = buffer.getChannelData(0);
-      
-      for (let i = 0; i < bufferSize; i++) {
-        output[i] = Math.random() * 2 - 1;
-      }
-
-      const whiteNoise = ctx.createBufferSource();
-      whiteNoise.buffer = buffer;
-
-      const filter = ctx.createBiquadFilter();
-      filter.type = 'lowpass';
-      filter.frequency.setValueAtTime(350, ctx.currentTime);
-      filter.frequency.exponentialRampToValueAtTime(80, ctx.currentTime + 1.2);
-
-      const gain = ctx.createGain();
-      gain.gain.setValueAtTime(0.25, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 1.2);
-
-      whiteNoise.connect(filter);
-      filter.connect(gain);
-      gain.connect(ctx.destination);
-
-      whiteNoise.start();
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const bufferSize = ctx.sampleRate * 1.5;
+        const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+        const output = buffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) { output[i] = Math.random() * 2 - 1; }
+        const whiteNoise = ctx.createBufferSource();
+        whiteNoise.buffer = buffer;
+        const filter = ctx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(350, ctx.currentTime);
+        filter.frequency.exponentialRampToValueAtTime(80, ctx.currentTime + 1.2);
+        const gain = ctx.createGain();
+        gain.gain.setValueAtTime(0.25, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 1.2);
+        whiteNoise.connect(filter);
+        filter.connect(gain);
+        gain.connect(ctx.destination);
+        whiteNoise.start();
+      } catch(e) {}
     }
 
     function blowCandle() {
+      if (candleBlown) return;
+      candleBlown = true;
+
       playBreezeSound();
-      document.getElementById('flame').style.display = 'none';
+      document.getElementById('flameArea').style.display = 'none';
       document.getElementById('nextSection').style.display = 'block';
 
-      for (let i = 0; i < 35; i++) {
-        setTimeout(createRainDrop, i * 120);
-      }
+      // Start continuous slow rain
+      setInterval(createRainDrop, 600);
     }
 
     function createRainDrop() {
@@ -141,8 +161,21 @@
       drop.innerText = "Happy birthday ❤️❤️";
       drop.style.left = Math.random() * 85 + 5 + "vw";
       document.body.appendChild(drop);
-      setTimeout(() => drop.remove(), 3200);
+      setTimeout(() => drop.remove(), 6200);
     }
+
+    // Spawn floating background hearts
+    function createBgHeart() {
+      const h = document.createElement('div');
+      h.classList.add('bg-heart');
+      const icons = ['💗', '💖', '✨', '🌸', '💕'];
+      h.innerText = icons[Math.floor(Math.random() * icons.length)];
+      h.style.left = Math.random() * 90 + 5 + "vw";
+      h.style.animationDuration = Math.random() * 3 + 4 + "s";
+      document.body.appendChild(h);
+      setTimeout(() => h.remove(), 7000);
+    }
+    setInterval(createBgHeart, 450);
   </script>
 </body>
 </html>
