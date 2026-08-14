@@ -3,26 +3,38 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Our Memories 📸</title>
+  <title>Cute Memories 📸</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
     body {
-      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-      color: #fff; min-height: 100vh; display: flex; justify-content: center; align-items: center; text-align: center;
+      background: linear-gradient(-45deg, #ff9a9e, #fecfef, #a1c4fd, #c2e9fb);
+      background-size: 400% 400%; animation: gradientBG 15s ease infinite;
+      min-height: 100vh; display: flex; justify-content: center; align-items: center; text-align: center;
     }
+    @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
     .container {
-      width: 90%; max-width: 400px; padding: 25px 20px; background: rgba(255, 255, 255, 0.08);
-      border-radius: 20px; backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.15);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      width: 88%; max-width: 380px; padding: 25px 20px; background: rgba(255, 255, 255, 0.5);
+      border-radius: 25px; backdrop-filter: blur(15px); border: 2px solid rgba(255, 255, 255, 0.7);
+      box-shadow: 0 10px 30px rgba(255, 182, 193, 0.3);
     }
-    h2 { color: #ffd1dc; margin-bottom: 15px; }
-    .card { background: rgba(255,255,255,0.1); padding: 12px; border-radius: 15px; margin-bottom: 15px; }
-    .card img { width: 100%; height: 260px; object-fit: cover; border-radius: 10px; }
-    .caption { margin-top: 10px; font-size: 0.95rem; color: #f0f0f0; min-height: 45px; display: flex; align-items: center; justify-content: center; }
+    h2 { color: #ff477e; margin-bottom: 15px; }
+    .photo-card {
+      position: relative; background: #fff; padding: 12px 12px 25px; border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1); margin-bottom: 20px;
+    }
+    .photo-card img { width: 100%; height: 270px; object-fit: cover; border-radius: 10px; }
+    
+    /* Cute sticker overlay */
+    .sticker {
+      position: absolute; bottom: 5px; right: 15px; font-size: 1.8rem;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); animation: floatSticker 2s infinite alternate ease-in-out;
+    }
+    @keyframes floatSticker { 0% { transform: translateY(0); } 100% { transform: translateY(-6px); } }
+
     .btn {
       background: linear-gradient(45deg, #ff758c, #ff7eb3); border: none; color: white;
-      padding: 12px 25px; border-radius: 25px; font-weight: bold; cursor: pointer;
-      text-decoration: none; display: inline-block; margin: 5px; box-shadow: 0 4px 15px rgba(255,117,140,0.4);
+      padding: 12px 28px; border-radius: 25px; font-weight: bold; cursor: pointer;
+      text-decoration: none; display: inline-block; box-shadow: 0 4px 15px rgba(255,117,140,0.4);
       transition: transform 0.2s;
     }
     .btn:hover { transform: scale(1.05); }
@@ -31,33 +43,40 @@
 <body>
 
   <div class="container">
-    <h2>📸 Cute Memories</h2>
-    <div class="card">
-      <img id="photo" src="images/photo1.jpg" alt="Memory" onerror="this.src='https://via.placeholder.com/300x250?text=Photo+Not+Found'">
-      <p class="caption" id="caption">Quiet moments holding you close. ❤️</p>
+    <h2>📸 Sweet Memories</h2>
+    
+    <div class="photo-card">
+      <img id="photo" src="images/photo1.jpg" alt="Memory">
+      <div class="sticker" id="sticker">💖</div>
     </div>
 
-    <button class="btn" onclick="nextPhoto()">Next Photo ➔</button>
-    <br>
-    <a href="wishes.html" class="btn" style="background: rgba(255,255,255,0.2); margin-top: 10px;">Skip to Game 🎈</a>
+    <button id="nextBtn" class="btn" onclick="nextPhoto()">Next Photo ➔</button>
   </div>
 
   <script>
     const photos = [
-      { src: "images/photo1.jpg", text: "Quiet moments holding you close. ❤️" },
-      { src: "images/photo2.jpg", text: "Cooking together and laughing at our mess. 🍝" },
-      { src: "images/photo3.jpg", text: "Ice cream on a sunny afternoon stroll. 🍦" },
-      { src: "images/photo4.jpg", text: "Late night drives and endless talks. 🚗" },
-      { src: "images/photo5.jpg", text: "Making golden memories every single day. ✨" },
-      { src: "images/photo6.jpg", text: "Always laughing together no matter what. 😊" },
-      { src: "images/photo7.jpg", text: "Here's to many more beautiful years! 🎉" }
+      { src: "images/photo1.jpg", sticker: "💖" },
+      { src: "images/photo2.jpg", sticker: "🌸" },
+      { src: "images/photo3.jpg", sticker: "✨" },
+      { src: "images/photo4.jpg", sticker: "💌" },
+      { src: "images/photo5.jpg", sticker: "🎀" },
+      { src: "images/photo6.jpg", sticker: "🥰" },
+      { src: "images/photo7.jpg", sticker: "👑" }
     ];
     let index = 0;
 
     function nextPhoto() {
-      index = (index + 1) % photos.length;
-      document.getElementById('photo').src = photos[index].src;
-      document.getElementById('caption').innerText = photos[index].text;
+      if (index < photos.length - 1) {
+        index++;
+        document.getElementById('photo').src = photos[index].src;
+        document.getElementById('sticker').innerText = photos[index].sticker;
+        
+        if (index === photos.length - 1) {
+          const btn = document.getElementById('nextBtn');
+          btn.innerText = "Let's Pop Balloons 🎈";
+          btn.onclick = function() { window.location.href = "wishes.html"; };
+        }
+      }
     }
   </script>
 </body>
