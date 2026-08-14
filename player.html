@@ -3,66 +3,53 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Special Song & Letter 🎶</title>
+  <title>Letter For You 💌</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', cursive, sans-serif; }
     body {
-      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-      color: #fff; min-height: 100vh; display: flex; justify-content: center; align-items: center; text-align: center; padding: 20px 0;
+      background: linear-gradient(-45deg, #ff9a9e, #fecfef, #a1c4fd, #c2e9fb);
+      background-size: 400% 400%; animation: gradientBG 15s ease infinite;
+      min-height: 100vh; display: flex; justify-content: center; align-items: center; text-align: center; padding: 25px 0;
     }
+    @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
     .container {
-      width: 90%; max-width: 400px; padding: 25px 20px; background: rgba(255, 255, 255, 0.08);
-      border-radius: 20px; backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.15);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      width: 88%; max-width: 380px; padding: 25px 20px; background: rgba(255, 255, 255, 0.55);
+      border-radius: 25px; backdrop-filter: blur(15px); border: 2px solid rgba(255, 255, 255, 0.7);
+      box-shadow: 0 10px 30px rgba(255, 182, 193, 0.3);
     }
-    h2 { color: #ffd1dc; margin-bottom: 15px; }
+    h2 { color: #ff477e; margin-bottom: 15px; font-size: 1.5rem; }
     
-    /* Music Player Card */
-    .player-card {
-      background: rgba(0, 0, 0, 0.25); padding: 15px; border-radius: 15px; margin-bottom: 20px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
+    /* Cute Envelope / Letter Container */
+    .letter-card {
+      background: #ffffff; color: #4a4a4a; padding: 25px 20px; border-radius: 20px;
+      text-align: left; font-family: 'Georgia', serif; line-height: 1.7;
+      box-shadow: 0 8px 20px rgba(255, 182, 193, 0.3); font-size: 0.95rem; border: 1px solid #ffe4e1;
     }
-    .music-icon { font-size: 2.2rem; margin-bottom: 5px; animation: pulse 1.5s infinite alternate; }
-    @keyframes pulse { 0% { transform: scale(1); } 100% { transform: scale(1.15); } }
-    audio { width: 100%; margin-top: 10px; border-radius: 10px; }
+    .letter-card p { margin-bottom: 12px; }
+    .signature { text-align: right; font-weight: bold; color: #ff477e; margin-top: 15px; }
 
-    /* Letter Box */
-    .letter-box {
-      background: #fff; color: #333; padding: 20px; border-radius: 12px;
-      text-align: left; font-family: 'Georgia', serif; line-height: 1.6;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.3); font-size: 0.95rem;
-    }
     .btn {
       background: linear-gradient(45deg, #ff758c, #ff7eb3); border: none; color: white;
-      padding: 10px 22px; border-radius: 25px; font-weight: bold; cursor: pointer;
-      text-decoration: none; display: inline-block; margin-top: 20px; box-shadow: 0 4px 15px rgba(255,117,140,0.4);
+      padding: 12px 28px; border-radius: 25px; font-weight: bold; cursor: pointer;
+      text-decoration: none; display: inline-block; margin-top: 20px;
+      box-shadow: 0 5px 15px rgba(255, 117, 140, 0.4);
     }
   </style>
 </head>
 <body>
 
   <div class="container">
-    <h2>🎵 Birthday Song</h2>
-    
-    <!-- Audio Player linked to music/birthday.mp3 -->
-    <div class="player-card">
-      <div class="music-icon">🎶</div>
-      <p style="color: #ff7eb3; font-weight: bold;">Playing: Birthday Surprise</p>
-      <audio controls autoplay loop>
-        <source src="music/birthday.mp3" type="audio/mpeg">
-        Your browser does not support the audio element.
-      </audio>
-    </div>
-
     <h2>💌 A Letter Just For You</h2>
-    <div class="letter-box">
-      <p><strong>Happy Birthday!</strong></p><br>
-      <p>I kept this little corner of the internet just for you, because a normal card felt far too small for everything I wanted to say.</p><br>
-      <p>Thank you for all the golden evenings, terrible jokes, drives with no destination, and every ordinary day you quietly made better.</p><br>
-      <p>Here’s to another year of us, laughing at nothing at all. With all my love, always!</p>
+
+    <div class="letter-card">
+      <p><strong>Happy Birthday, Cutiepie! 🎉✨</strong></p>
+      <p>I built this little corner of the internet just for you, because a normal card felt far too small to hold all the happiness you bring into my life.</p>
+      <p>Thank you for all the golden memories, late-night laughs, silly jokes, and every ordinary day you quietly make extraordinary.</p>
+      <p>Here’s to another wonderful year full of magic, smiles, and endless adventures!</p>
+      <div class="signature">With all my love, always ❤️</div>
     </div>
 
-    <a href="index.html" class="btn">Replay Experience 🔄</a>
+    <a href="start.html" class="btn">Replay Surprise 🔄</a>
   </div>
 
 </body>
