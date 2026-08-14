@@ -3,43 +3,38 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Secret Passcode 🔒</title>
   <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Comfortaa', cursive, sans-serif; user-select: none; }
-    
     :root {
       --bg-gradient: linear-gradient(-45deg, #ff9a9e, #fecfef, #a1c4fd, #c2e9fb);
       --text-main: #ff477e;
       --text-sub: #6c5ce7;
-      --card-bg: rgba(255, 255, 255, 0.45);
-    }
-
-    body.theme-lavender {
-      --bg-gradient: linear-gradient(-45deg, #2b1055, #7597de, #4a00e0, #8e2de2);
-      --text-main: #e0aaff;
-      --text-sub: #c77dff;
-      --card-bg: rgba(20, 10, 35, 0.55);
-    }
-
-    body.theme-mint {
-      --bg-gradient: linear-gradient(-45deg, #a8e6cf, #dbede6, #ffd3b6, #ffaaa5);
-      --text-main: #2d6a4f;
-      --text-sub: #52b788;
       --card-bg: rgba(255, 255, 255, 0.55);
     }
 
+    [data-theme="dark"] {
+      --bg-gradient: linear-gradient(-45deg, #0f172a, #1e1b4b, #311042, #181825);
+      --text-main: #ff758c;
+      --text-sub: #a78bfa;
+      --card-bg: rgba(30, 27, 75, 0.65);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Comfortaa', cursive, sans-serif; user-select: none; }
     body {
       background: var(--bg-gradient); background-size: 400% 400%; animation: gradientBG 12s ease infinite;
       min-height: 100vh; display: flex; justify-content: center; align-items: center; text-align: center;
-      overflow: hidden; position: relative; transition: all 0.5s ease;
+      overflow: hidden; position: relative; transition: background 0.5s ease;
     }
     @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
+    /* Compact 2-Line Theme Toggle Button */
     .theme-toggle {
-      position: absolute; top: 15px; left: 15px; z-index: 100;
-      background: var(--card-bg); border: 1.5px solid rgba(255,255,255,0.8);
-      padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; cursor: pointer; color: var(--text-main); font-weight: bold;
+      position: absolute; top: 12px; left: 12px; z-index: 100;
+      background: var(--card-bg); border: 1.5px solid rgba(255, 255, 255, 0.85);
+      padding: 5px 10px; border-radius: 14px; font-size: 0.68rem; line-height: 1.25;
+      cursor: pointer; color: var(--text-main); font-weight: bold; text-align: center;
+      max-width: 75px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); backdrop-filter: blur(10px);
     }
 
     .bg-heart {
@@ -57,32 +52,29 @@
       border-radius: 30px; border: 1.5px solid rgba(255, 255, 255, 0.8);
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15); z-index: 10;
     }
-    h2 { color: var(--text-main); margin-bottom: 6px; font-size: 1.4rem; }
-    p { color: var(--text-sub); margin-bottom: 15px; font-size: 0.88rem; }
-    .pin-display { font-size: 2rem; letter-spacing: 10px; margin-bottom: 18px; min-height: 40px; color: var(--text-main); font-weight: bold; }
-    
-    .keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; max-width: 240px; margin: 0 auto; }
+    h2 { color: var(--text-main); margin-bottom: 6px; font-size: 1.3rem; }
+    p { color: var(--text-sub); margin-bottom: 15px; font-size: 0.85rem; }
+
+    .pin-display { font-size: 2rem; letter-spacing: 10px; color: var(--text-main); height: 45px; margin-bottom: 10px; }
+    .keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
     .key {
-      background: rgba(255, 255, 255, 0.85); border: 1px solid rgba(255, 182, 193, 0.6);
-      color: #ff477e; font-size: 1.25rem; padding: 14px; border-radius: 50%; cursor: pointer;
-      font-weight: bold; transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      background: rgba(255, 255, 255, 0.8); border: none; padding: 15px; font-size: 1.2rem;
+      font-weight: bold; color: var(--text-main); border-radius: 50%; width: 55px; height: 55px;
+      margin: 0 auto; display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05); cursor: pointer; transition: transform 0.1s;
     }
-    .key:active { transform: scale(0.88); background: #ff758c; color: white; }
+    .key:active { transform: scale(0.88); }
   </style>
 </head>
 <body>
 
-  <button class="theme-toggle" onclick="switchTheme()">🎨 Change Theme</button>
-  
-
-  <audio id="clickSfx" src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3" preload="auto"></audio>
-  <audio id="sparkleSfx" src="https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3" preload="auto"></audio>
+  <button class="theme-toggle" onclick="switchTheme()">🎨 Change<br>Theme</button>
 
   <div class="container">
     <h2>🔒 Secret Passcode</h2>
     <p>Enter secret code to unlock</p>
-    <div class="pin-display" id="pinDisplay">____</div>
+    <div class="pin-display" id="pinDisplay"></div>
+    
     <div class="keypad">
       <button class="key" onclick="pressKey('1')">1</button>
       <button class="key" onclick="pressKey('2')">2</button>
@@ -101,41 +93,32 @@
 
   <script>
     let currentPin = "";
-    const correctPin = "3108";
-
-    const themes = ['', 'theme-lavender', 'theme-mint'];
-    let themeIdx = 0;
-    function switchTheme() {
-      themeIdx = (themeIdx + 1) % themes.length;
-      document.body.className = themes[themeIdx];
-    }
-
-    function triggerHaptic() {
-      if (navigator.vibrate) navigator.vibrate(40);
-    }
-
-    function playClick() {
-      triggerHaptic();
-      const audio = document.getElementById('clickSfx');
-      audio.currentTime = 0;
-      audio.play().catch(e => {});
-    }
+    const correctPin = "3108"; 
 
     function pressKey(num) {
-      playClick();
-      if (currentPin.length < 4) { currentPin += num; updateDisplay(); }
+      if (currentPin.length < 4) {
+        currentPin += num;
+        updateDisplay();
+      }
     }
-    function clearPin() { playClick(); currentPin = ""; updateDisplay(); }
-    function updateDisplay() { document.getElementById('pinDisplay').innerText = currentPin.padEnd(4, '_'); }
-    
+    function clearPin() { currentPin = ""; updateDisplay(); }
+    function updateDisplay() { document.getElementById("pinDisplay").innerText = currentPin; }
+
     function checkPin() {
       if (currentPin === correctPin) {
-        document.getElementById('sparkleSfx').play().catch(e => {});
-        confetti({ particleCount: 70, spread: 60, origin: { y: 0.6 } });
-        setTimeout(() => { window.location.href = "cake.html"; }, 800);
+        window.location.href = "cake.html";
       } else {
-        alert("Incorrect PIN! Try again ❤️");
+        alert("Wrong Code! Try again 💖");
         clearPin();
+      }
+    }
+
+    function switchTheme() {
+      const currentTheme = document.body.getAttribute('data-theme');
+      if (currentTheme === 'dark') {
+        document.body.removeAttribute('data-theme');
+      } else {
+        document.body.setAttribute('data-theme', 'dark');
       }
     }
 
