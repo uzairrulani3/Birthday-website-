@@ -8,28 +8,47 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
     body {
       background: linear-gradient(-45deg, #ff9a9e, #fecfef, #a1c4fd, #c2e9fb);
-      background-size: 400% 400%; animation: gradientBG 15s ease infinite;
+      background-size: 400% 400%; animation: gradientBG 12s ease infinite;
       min-height: 100vh; display: flex; justify-content: center; align-items: center; text-align: center;
+      overflow: hidden; position: relative;
     }
     @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
+    .bg-heart {
+      position: absolute; color: rgba(255, 105, 180, 0.4); font-size: 1.5rem;
+      animation: floatUp 7s linear infinite; pointer-events: none;
+    }
+    @keyframes floatUp {
+      0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
+      50% { opacity: 0.8; }
+      100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+    }
+
     .container {
-      width: 88%; max-width: 380px; padding: 30px 20px; background: rgba(255, 255, 255, 0.5);
-      border-radius: 25px; backdrop-filter: blur(15px); border: 2px solid rgba(255, 255, 255, 0.7);
-      box-shadow: 0 10px 30px rgba(255, 182, 193, 0.3);
+      width: 88%; max-width: 380px; padding: 30px 20px; background: rgba(255, 255, 255, 0.6);
+      border-radius: 25px; backdrop-filter: blur(15px); border: 2px solid rgba(255, 255, 255, 0.8);
+      box-shadow: 0 10px 30px rgba(255, 182, 193, 0.4); z-index: 10;
     }
     h2 { color: #ff477e; margin-bottom: 10px; }
     p { color: #555; font-size: 0.95rem; }
     
-    .balloon-box { display: flex; justify-content: space-around; margin: 35px 0; }
+    .balloon-box { display: flex; justify-content: space-around; margin: 30px 0; }
     .balloon {
-      width: 55px; height: 70px; border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+      width: 60px; height: 75px; border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
       cursor: pointer; position: relative; transition: transform 0.2s;
-      box-shadow: inset -5px -5px 10px rgba(0,0,0,0.1);
+      box-shadow: inset -5px -5px 10px rgba(0,0,0,0.1); animation: bounce 1.8s infinite alternate;
     }
-    .balloon::after { content: '📍'; position: absolute; bottom: -12px; left: 20px; font-size: 10px; }
+    @keyframes bounce { 0% { transform: translateY(0); } 100% { transform: translateY(-10px); } }
+    .balloon::after { content: '📍'; position: absolute; bottom: -12px; left: 22px; font-size: 10px; }
     .balloon.popped { visibility: hidden; }
     
-    .wish-display { min-height: 55px; color: #ff477e; font-weight: 600; font-size: 1rem; margin-bottom: 20px; }
+    .wish-display {
+      min-height: 80px; color: #ff2a6d; font-weight: 800; font-size: 1.25rem;
+      margin-bottom: 20px; text-shadow: 0 2px 4px rgba(255,255,255,0.8);
+      display: flex; align-items: center; justify-content: center;
+      line-height: 1.4; animation: popWish 0.3s ease-out;
+    }
+    @keyframes popWish { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
     
     .btn {
       background: linear-gradient(45deg, #ff758c, #ff7eb3); border: none; color: white;
@@ -40,29 +59,49 @@
 </head>
 <body>
 
+  <div class="bg-heart" style="left: 20%; animation-delay: 0s;">💖</div>
+  <div class="bg-heart" style="left: 50%; animation-delay: 2s;">✨</div>
+  <div class="bg-heart" style="left: 80%; animation-delay: 4s;">🌸</div>
+
   <div class="container">
     <h2>🎈 Pop a Balloon!</h2>
-    <p>Tap each balloon to discover sweet wishes ✨</p>
+    <p>Tap a balloon to unlock sweet wishes ✨</p>
 
     <div class="balloon-box">
-      <div class="balloon" style="background: #ff758c;" onclick="pop(this, 'May your year be filled with endless smiles & warmth! ✨🌸')"></div>
-      <div class="balloon" style="background: #ff7eb3;" onclick="pop(this, 'Wishing you all the love & sweet magic in the world! 💕🧸')"></div>
-      <div class="balloon" style="background: #a88beb;" onclick="pop(this, 'Always keep shining bright as the sweetest star! 🌟💖')"></div>
+      <div class="balloon" style="background: #ff758c;" onclick="pop(this, 'May your life be filled with endless warmth & sweet smiles! ✨🌸')"></div>
+      <div class="balloon" style="background: #ff7eb3; animation-delay: 0.4s;" onclick="pop(this, 'Wishing you all the happiness & magic in the world! 💕🧸')"></div>
+      <div class="balloon" style="background: #a88beb; animation-delay: 0.8s;" onclick="pop(this, 'Always keep shining bright like a sweet star! 🌟💖')"></div>
     </div>
 
-    <div class="wish-display" id="wishText">Tap a balloon above...</div>
+    <div class="wish-display" id="wishText">Tap any balloon above...</div>
 
     <a href="player.html" class="btn">Read My Letter 💌</a>
   </div>
 
   <script>
-    function pop(element, wish) {
-      // Balloon pop sound effect
-      let popAudio = new Audio('https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3');
-      popAudio.play();
+    function playPopSound() {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(800, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(100, ctx.currentTime + 0.1);
+      gain.gain.setValueAtTime(1, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.1);
+    }
 
+    function pop(element, wish) {
+      playPopSound();
       element.classList.add('popped');
-      document.getElementById('wishText').innerText = wish;
+      const textEl = document.getElementById('wishText');
+      textEl.innerText = wish;
+      textEl.style.animation = 'none';
+      textEl.offsetHeight; 
+      textEl.style.animation = 'popWish 0.3s ease-out';
     }
   </script>
 </body>
