@@ -2,18 +2,45 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Comfortaa', cursive, sans-serif; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Comfortaa', cursive, sans-serif; user-select: none; }
+    
+    :root {
+      --bg-gradient: linear-gradient(-45deg, #ff9a9e, #fecfef, #a1c4fd, #c2e9fb);
+      --text-main: #ff477e;
+      --text-sub: #6c5ce7;
+      --card-bg: rgba(255, 255, 255, 0.45);
+    }
+
+    body.theme-lavender {
+      --bg-gradient: linear-gradient(-45deg, #2b1055, #7597de, #4a00e0, #8e2de2);
+      --text-main: #e0aaff;
+      --text-sub: #c77dff;
+      --card-bg: rgba(20, 10, 35, 0.55);
+    }
+
+    body.theme-mint {
+      --bg-gradient: linear-gradient(-45deg, #a8e6cf, #dbede6, #ffd3b6, #ffaaa5);
+      --text-main: #2d6a4f;
+      --text-sub: #52b788;
+      --card-bg: rgba(255, 255, 255, 0.55);
+    }
+
     body {
-      background: linear-gradient(-45deg, #ff9a9e, #fecfef, #a1c4fd, #c2e9fb);
-      background-size: 400% 400%; animation: gradientBG 12s ease infinite;
+      background: var(--bg-gradient); background-size: 400% 400%; animation: gradientBG 12s ease infinite;
       min-height: 100vh; display: flex; justify-content: center; align-items: center; text-align: center;
-      overflow: hidden; position: relative;
+      overflow: hidden; position: relative; transition: all 0.5s ease;
     }
     @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
+    .theme-toggle {
+      position: absolute; top: 15px; left: 15px; z-index: 100;
+      background: var(--card-bg); border: 1.5px solid rgba(255,255,255,0.8);
+      padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; cursor: pointer; color: var(--text-main); font-weight: bold;
+    }
 
     .bg-heart {
       position: absolute; bottom: -30px; font-size: 1.2rem; pointer-events: none;
@@ -26,27 +53,28 @@
 
     .container {
       width: 88%; max-width: 360px; padding: 30px 20px;
-      background: rgba(255, 255, 255, 0.45); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      background: var(--card-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
       border-radius: 30px; border: 1.5px solid rgba(255, 255, 255, 0.8);
-      box-shadow: 0 20px 40px rgba(255, 105, 180, 0.2); z-index: 10;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15); z-index: 10;
     }
-    h2 { color: #ff477e; margin-bottom: 6px; font-size: 1.4rem; }
-    p { color: #6c5ce7; margin-bottom: 15px; font-size: 0.88rem; }
-    .pin-display { font-size: 2rem; letter-spacing: 10px; margin-bottom: 18px; min-height: 40px; color: #ff477e; font-weight: bold; }
+    h2 { color: var(--text-main); margin-bottom: 6px; font-size: 1.4rem; }
+    p { color: var(--text-sub); margin-bottom: 15px; font-size: 0.88rem; }
+    .pin-display { font-size: 2rem; letter-spacing: 10px; margin-bottom: 18px; min-height: 40px; color: var(--text-main); font-weight: bold; }
     
     .keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; max-width: 240px; margin: 0 auto; }
     .key {
       background: rgba(255, 255, 255, 0.85); border: 1px solid rgba(255, 182, 193, 0.6);
       color: #ff477e; font-size: 1.25rem; padding: 14px; border-radius: 50%; cursor: pointer;
       font-weight: bold; transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      box-shadow: 0 4px 12px rgba(255, 105, 180, 0.15);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
     .key:active { transform: scale(0.88); background: #ff758c; color: white; }
   </style>
 </head>
 <body>
 
-  <!-- Custom SFX Audio -->
+  <button class="theme-toggle" onclick="switchTheme()">🎨 Theme</button>
+
   <audio id="clickSfx" src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3" preload="auto"></audio>
   <audio id="magicSfx" src="https://assets.mixkit.co/active_storage/sfx/2014/2014-preview.mp3" preload="auto"></audio>
 
@@ -74,7 +102,19 @@
     let currentPin = "";
     const correctPin = "3108";
 
+    const themes = ['', 'theme-lavender', 'theme-mint'];
+    let themeIdx = 0;
+    function switchTheme() {
+      themeIdx = (themeIdx + 1) % themes.length;
+      document.body.className = themes[themeIdx];
+    }
+
+    function triggerHaptic() {
+      if (navigator.vibrate) navigator.vibrate(40);
+    }
+
     function playClick() {
+      triggerHaptic();
       const audio = document.getElementById('clickSfx');
       audio.currentTime = 0;
       audio.play().catch(e => {});
