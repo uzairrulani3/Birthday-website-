@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enter Passcode 🔒</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+    body {
+      background: linear-gradient(-45deg, #ff9a9e, #fecfef, #a1c4fd, #c2e9fb);
+      background-size: 400% 400%; animation: gradientBG 12s ease infinite;
+      min-height: 100vh; display: flex; justify-content: center; align-items: center; text-align: center;
+      overflow: hidden; position: relative;
+    }
+    @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
+    .bg-heart {
+      position: absolute; color: rgba(255, 105, 180, 0.4); font-size: 1.5rem;
+      animation: floatUp 7s linear infinite; pointer-events: none;
+    }
+    @keyframes floatUp {
+      0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
+      50% { opacity: 0.8; }
+      100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+    }
+
+    .container {
+      width: 88%; max-width: 380px; padding: 30px 20px; background: rgba(255, 255, 255, 0.6);
+      border-radius: 25px; backdrop-filter: blur(15px); border: 2px solid rgba(255, 255, 255, 0.8);
+      box-shadow: 0 10px 30px rgba(255, 182, 193, 0.4); z-index: 10;
+    }
+    h2 { color: #ff477e; margin-bottom: 10px; font-size: 1.5rem; }
+    p { color: #555; margin-bottom: 20px; font-size: 0.95rem; }
+    .pin-display { font-size: 2.2rem; letter-spacing: 12px; margin-bottom: 20px; min-height: 45px; color: #ff477e; font-weight: bold; }
+    .keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; max-width: 250px; margin: 0 auto; }
+    .key {
+      background: rgba(255, 255, 255, 0.9); border: 1px solid rgba(255, 182, 193, 0.5);
+      color: #ff477e; font-size: 1.3rem; padding: 14px; border-radius: 50%; cursor: pointer;
+      font-weight: bold; transition: 0.2s; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+    .key:hover { background: #ff758c; color: white; transform: scale(1.08); }
+  </style>
+</head>
+<body>
+
+  <div class="bg-heart" style="left: 15%; animation-delay: 0s;">💖</div>
+  <div class="bg-heart" style="left: 35%; animation-delay: 2s;">✨</div>
+  <div class="bg-heart" style="left: 65%; animation-delay: 4s;">💕</div>
+  <div class="bg-heart" style="left: 85%; animation-delay: 1s;">🌟</div>
+
+  <div class="container">
+    <h2>🔒 Passcode Required</h2>
+    <p>Enter secret code to unlock</p>
+    <div class="pin-display" id="pinDisplay">____</div>
+    <div class="keypad">
+      <button class="key" onclick="pressKey('1')">1</button>
+      <button class="key" onclick="pressKey('2')">2</button>
+      <button class="key" onclick="pressKey('3')">3</button>
+      <button class="key" onclick="pressKey('4')">4</button>
+      <button class="key" onclick="pressKey('5')">5</button>
+      <button class="key" onclick="pressKey('6')">6</button>
+      <button class="key" onclick="pressKey('7')">7</button>
+      <button class="key" onclick="pressKey('8')">8</button>
+      <button class="key" onclick="pressKey('9')">9</button>
+      <button class="key" onclick="clearPin()">C</button>
+      <button class="key" onclick="pressKey('0')">0</button>
+      <button class="key" onclick="checkPin()">✓</button>
+    </div>
+  </div>
+
+  <script>
+    let currentPin = "";
+    const correctPin = "3108";
+
+    function pressKey(num) {
+      if (currentPin.length < 4) { currentPin += num; updateDisplay(); }
+    }
+    function clearPin() { currentPin = ""; updateDisplay(); }
+    function updateDisplay() { document.getElementById('pinDisplay').innerText = currentPin.padEnd(4, '_'); }
+    function checkPin() {
+      if (currentPin === correctPin) {
+        window.location.href = "cake.html";
+      } else {
+        alert("Incorrect PIN! Try again ❤️");
+        clearPin();
+      }
+    }
+  </script>
+</body>
+</html>
