@@ -29,13 +29,17 @@
     /* Floating Music Bar */
     .music-bar {
       position: fixed; top: 15px; right: 15px; z-index: 8000;
-      background: rgba(255, 255, 255, 0.65); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-      padding: 8px 16px; border-radius: 30px; border: 1.5px solid rgba(255, 255, 255, 0.8);
-      display: flex; align-items: center; gap: 10px; box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      background: rgba(255, 255, 255, 0.75); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+      padding: 8px 14px; border-radius: 30px; border: 1.5px solid rgba(255, 255, 255, 0.85);
+      display: flex; align-items: center; gap: 8px; box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    }
+    .song-title {
+      font-size: 0.8rem; color: #ff477e; font-weight: bold; max-width: 90px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-right: 2px;
     }
     .music-btn {
-      background: none; border: none; font-size: 1.1rem; cursor: pointer;
-      transition: transform 0.15s; color: #ff477e;
+      background: none; border: none; font-size: 1rem; cursor: pointer;
+      transition: transform 0.15s; color: #ff477e; display: flex; align-items: center; justify-content: center;
     }
     .music-btn:active { transform: scale(0.85); }
     
@@ -62,6 +66,7 @@
     <div class="eq paused" id="eq">
       <div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div>
     </div>
+    <span class="song-title" id="songTitle">Tu hi mera</span>
     <button class="music-btn" onclick="prevSong()">⏮️</button>
     <button class="music-btn" id="playBtn" onclick="togglePlay()">⏸️</button>
     <button class="music-btn" onclick="nextSong()">⏭️</button>
@@ -72,15 +77,21 @@
   <iframe id="frame" src="passcode.html"></iframe>
 
   <script>
-    const playlist = ["music/birthday1.mp3", "music/birthday2.mp3", "music/birthday3.mp3"];
+    const playlist = [
+      { name: "Tu hi mera", src: "music/birthday1.mp3" },
+      { name: "Inaam", src: "music/birthday2.mp3" },
+      { name: "Aarzu", src: "music/birthday3.mp3" }
+    ];
     let songIndex = 0;
     const music = document.getElementById("bgm");
     const playBtn = document.getElementById("playBtn");
     const eq = document.getElementById("eq");
+    const songTitle = document.getElementById("songTitle");
     const start = document.getElementById("startScreen");
 
     function loadSong(index) {
-      music.src = playlist[index];
+      music.src = playlist[index].src;
+      songTitle.innerText = playlist[index].name;
     }
     loadSong(songIndex);
 
