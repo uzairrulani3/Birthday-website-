@@ -4,26 +4,30 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>For Ayesha 💗</title>
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body, html { width: 100%; height: 100%; overflow: hidden; background: #ffd1e8; }
+    body, html { width: 100%; height: 100%; overflow: hidden; background: #ffd1e8; font-family: 'Comfortaa', cursive, sans-serif; }
     iframe { border: none; width: 100vw; height: 100vh; display: block; }
     #startScreen {
       position: fixed; inset: 0; background: linear-gradient(-45deg, #ff9a9e, #fecfef, #a1c4fd, #c2e9fb);
+      background-size: 400% 400%; animation: gradientBG 12s ease infinite;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
-      font-family: 'Segoe UI', sans-serif; font-size: 1.4rem; color: #ff477e; font-weight: bold;
-      z-index: 999; cursor: pointer; text-align: center; padding: 20px;
+      font-size: 1.4rem; color: #ff477e; font-weight: bold; z-index: 999; cursor: pointer; padding: 20px;
     }
+    @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+    
     .start-card {
-      background: rgba(255, 255, 255, 0.75); padding: 25px 35px; border-radius: 25px;
-      backdrop-filter: blur(10px); box-shadow: 0 10px 30px rgba(255, 182, 193, 0.5);
-      border: 2px solid rgba(255, 255, 255, 0.8);
+      background: rgba(255, 255, 255, 0.5); padding: 30px 40px; border-radius: 30px;
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      box-shadow: 0 15px 35px rgba(255, 105, 180, 0.25); border: 1.5px solid rgba(255, 255, 255, 0.8);
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
+    .start-card:hover { transform: scale(1.05); }
   </style>
 </head>
 <body>
 
-  <!-- Clean Start Screen without the "Turn sound on!" text -->
   <div id="startScreen">
     <div class="start-card">
       🎁 Tap to Begin 💗
@@ -34,7 +38,7 @@
     <source src="music/birthday.mp3" type="audio/mpeg">
   </audio>
 
-  <!-- Starts DIRECTLY on passcode.html -->
+  <!-- Loads Passcode Page Directly -->
   <iframe id="frame" src="passcode.html"></iframe>
 
   <script>
