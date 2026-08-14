@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Comfortaa:wght@700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
     body {
       font-family: 'Comfortaa', cursive, sans-serif;
       background: linear-gradient(-45deg, #ff9a9e, #fecfef, #a1c4fd, #c2e9fb);
@@ -31,19 +32,28 @@
       box-shadow: 0 20px 40px rgba(255, 105, 180, 0.2); z-index: 10;
     }
     h2 { color: #ff477e; margin-bottom: 12px; font-size: 1.4rem; }
-    
-    /* Interactive Envelope Container */
-    .envelope-wrapper {
+
+    /* Interactive Gift Box */
+    .gift-box {
+      width: 120px; height: 120px; margin: 20px auto; position: relative; cursor: pointer;
+      animation: bounce 2s infinite ease-in-out;
+    }
+    @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+    .gift-body { width: 100%; height: 100%; background: #ff758c; border-radius: 15px; position: relative; box-shadow: 0 10px 20px rgba(0,0,0,0.15); }
+    .gift-ribbon-v { position: absolute; left: 48px; width: 24px; height: 100%; background: #ffeb3b; }
+    .gift-ribbon-h { position: absolute; top: 48px; width: 100%; height: 24px; background: #ffeb3b; }
+    .gift-bow { position: absolute; top: -20px; left: 35px; font-size: 3rem; }
+
+    /* Handwritten Letter */
+    .letter-card {
       background: #ffffff; padding: 22px 18px; border-radius: 18px;
       box-shadow: 0 10px 25px rgba(255, 182, 193, 0.4); border: 1px solid #ffe4e1;
-      text-align: left; position: relative;
+      text-align: left; display: none; animation: slideUp 0.6s ease forwards;
     }
-    .envelope-icon { font-size: 3.5rem; text-align: center; cursor: pointer; animation: pulse 1.5s infinite; }
-    @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); } }
-    
-    /* Handwritten Romantic Letter */
+    @keyframes slideUp { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
+
     .letter-content {
-      font-family: 'Caveat', cursive; color: #4a4a4a; line-height: 1.55; font-size: 1.25rem; display: none;
+      font-family: 'Caveat', cursive; color: #4a4a4a; line-height: 1.55; font-size: 1.25rem;
     }
     .letter-content p { margin-bottom: 10px; }
     .signature { text-align: right; font-weight: bold; color: #ff477e; margin-top: 12px; font-size: 1.4rem; }
@@ -52,8 +62,7 @@
       background: linear-gradient(45deg, #ff758c, #ff7eb3); border: none; color: white;
       padding: 12px 28px; border-radius: 30px; font-weight: bold; cursor: pointer;
       text-decoration: none; display: inline-block; margin-top: 15px;
-      box-shadow: 0 8px 20px rgba(255, 117, 140, 0.4);
-      transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 8px 20px rgba(255, 117, 140, 0.4); transition: transform 0.2s;
     }
     .btn:active { transform: scale(0.92); }
   </style>
@@ -63,13 +72,19 @@
   <audio id="openSfx" src="https://assets.mixkit.co/active_storage/sfx/2014/2014-preview.mp3" preload="auto"></audio>
 
   <div class="container">
-    <h2>💌 A Letter Just For You</h2>
+    <h2>💌 A Birthday Surprise</h2>
 
-    <div class="envelope-wrapper">
-      <div id="envelope" class="envelope-icon" onclick="openLetter()">✉️</div>
-      <p id="tapHint" style="text-align: center; color: #ff477e; font-size: 0.85rem; font-weight: bold;">Tap envelope to open</p>
-      
-      <div id="letter" class="letter-content">
+    <div id="gift" class="gift-box" onclick="openGift()">
+      <div class="gift-bow">🎀</div>
+      <div class="gift-body">
+        <div class="gift-ribbon-v"></div>
+        <div class="gift-ribbon-h"></div>
+      </div>
+    </div>
+    <p id="giftHint" style="color: #ff477e; font-size: 0.85rem; font-weight: bold;">Tap box to unwrap your gift! 🎁</p>
+
+    <div id="letterCard" class="letter-card">
+      <div class="letter-content">
         <p><strong>Happy Birthday, Cutiepie! 🎉✨</strong></p>
         <p>I built this little corner of the internet just for you, because a normal card felt far too small to hold all the happiness you bring into my life.</p>
         <p>Thank you for all the golden memories, late-night laughs, silly jokes, and every ordinary day you quietly make extraordinary.</p>
@@ -82,11 +97,14 @@
   </div>
 
   <script>
-    function openLetter() {
+    function openGift() {
+      if (navigator.vibrate) navigator.vibrate([80, 40, 80]);
       document.getElementById('openSfx').play().catch(e => {});
-      document.getElementById('envelope').style.display = 'none';
-      document.getElementById('tapHint').style.display = 'none';
-      document.getElementById('letter').style.display = 'block';
+      document.getElementById('gift').style.display = 'none';
+      document.getElementById('giftHint').style.display = 'none';
+      document.getElementById('letterCard').style.display = 'block';
+
+      confetti({ particleCount: 100, spread: 80, origin: { y: 0.6 } });
     }
 
     function createBgHeart() {
