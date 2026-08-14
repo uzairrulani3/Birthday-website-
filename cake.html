@@ -27,12 +27,14 @@
 
     .container {
       width: 88%; max-width: 370px; padding: 30px 20px;
-      background: rgba(255, 255, 255, 0.45); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      background: rgba(255, 255, 255, 0.55); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
       border-radius: 30px; border: 1.5px solid rgba(255, 255, 255, 0.8);
       box-shadow: 0 20px 40px rgba(255, 105, 180, 0.2); z-index: 10;
     }
-    h2 { color: #ff477e; margin-bottom: 6px; font-size: 1.4rem; }
-    p { color: #6c5ce7; font-size: 0.9rem; }
+    
+    /* Contrast color for title */
+    h2 { color: #6a0572; margin-bottom: 6px; font-size: 1.4rem; text-shadow: 0 1px 2px rgba(255,255,255,0.8); }
+    p { color: #4a0e4e; font-size: 0.9rem; font-weight: bold; }
     
     .cake-wrapper { position: relative; width: 210px; margin: 25px auto 10px; cursor: pointer; }
     .cake-svg { width: 100%; height: auto; display: block; filter: drop-shadow(0 10px 18px rgba(255,105,180,0.3)); }
@@ -62,21 +64,38 @@
     }
     .btn:active { transform: scale(0.92); }
 
-    /* Birthday Rain Effect */
+    /* Sparkling Glitter Rain Effect */
     .rain-drop {
-      position: fixed; top: -50px; color: #ff3366; font-weight: 800;
-      font-size: 1.1rem; pointer-events: none; animation: fallSlow 6s linear forwards;
-      z-index: 100; text-shadow: 0 0 8px rgba(255,255,255,1); white-space: nowrap;
+      position: fixed; top: -50px; font-weight: 800;
+      font-size: 1.15rem; pointer-events: none; animation: fallSlow 6.5s linear forwards;
+      z-index: 100; white-space: nowrap;
+      
+      /* Shiny Metallic Gradient Text */
+      background: linear-gradient(90deg, #ff007f, #ffffff, #ffb6c1, #ffffff, #ff007f);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      
+      /* Glowing Aura & Sparkle Animation */
+      filter: drop-shadow(0 0 6px rgba(255, 20, 147, 0.8));
+      animation: fallSlow 6.5s linear forwards, sparkleGlint 1.5s linear infinite;
     }
+
     @keyframes fallSlow {
-      0% { transform: translateY(0); opacity: 1; }
-      100% { transform: translateY(110vh); opacity: 0; }
+      0% { transform: translateY(0) scale(0.9); opacity: 1; }
+      80% { opacity: 0.9; }
+      100% { transform: translateY(110vh) scale(1.05); opacity: 0; }
+    }
+
+    @keyframes sparkleGlint {
+      0% { background-position: 0% center; }
+      100% { background-position: 200% center; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Realistic Blowing Wind Sound -->
+  <!-- Blowing Wind Sound Effect -->
   <audio id="blowSfx" src="https://assets.mixkit.co/active_storage/sfx/2598/2598-preview.mp3" preload="auto"></audio>
 
   <div class="container">
@@ -101,7 +120,7 @@
     </div>
 
     <div id="nextSection" style="display: none;">
-      <p style="color: #ff477e; font-weight: bold; margin-top: 10px;">✨ Your wish is locked in! ✨</p>
+      <p style="color: #6a0572; font-weight: bold; margin-top: 10px;">✨ Your wish is locked in! ✨</p>
       <a href="memories.html" class="btn">See Our Memories ➔</a>
     </div>
   </div>
@@ -120,17 +139,21 @@
 
       confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });
       
-      // Start Birthday Rain
-      setInterval(createRainDrop, 400);
+      // Start Sparkling Birthday Rain
+      setInterval(createRainDrop, 380);
     }
 
     function createRainDrop() {
       const drop = document.createElement('div');
       drop.classList.add('rain-drop');
-      drop.innerText = "Happy birthday ❤️❤️";
-      drop.style.left = Math.random() * 85 + 5 + "vw";
+      
+      // Alternating glitter text variations
+      const texts = ["Happy birthday ✨❤️❤️", "Happy birthday 💖✨", "Happy birthday 🌸✨"];
+      drop.innerText = texts[Math.floor(Math.random() * texts.length)];
+      
+      drop.style.left = Math.random() * 80 + 5 + "vw";
       document.body.appendChild(drop);
-      setTimeout(() => drop.remove(), 6200);
+      setTimeout(() => drop.remove(), 6600);
     }
 
     function createBgHeart() {
