@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Our Memories ❤️</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<div class="page">
+
+    <h1>Our Memories ❤️</h1>
+
+    <p class="subtitle">
+        Some of my favourite moments with you.
+    </p>
+
+    <div class="photo-grid">
+
+        <div class="memory-photo">
+            <img src="images/photo2.jpg" alt="Memory 1">
+        </div>
+
+        <div class="memory-photo">
+            <img src="images/photo3.jpg" alt="Memory 2">
+        </div>
+
+        <div class="memory-photo">
+            <img src="images/photo4.jpg" alt="Memory 3">
+        </div>
+
+        <div class="memory-photo">
+            <img src="images/photo5.jpg" alt="Memory 4">
+        </div>
+
+        <div class="memory-photo">
+            <img src="images/photo6.jpg" alt="Memory 5">
+        </div>
+
+        <div class="memory-photo">
+            <img src="images/photo7.jpg" alt="Memory 6">
+        </div>
+
+    </div>
+
+    <a href="letter.html" class="main-button">
+        💌 Read something for you
+    </a>
+
+    <a href="gifts.html" class="back-button">
+        ← Back to gifts
+    </a>
+
+</div>
+
+</body>
+</html>
