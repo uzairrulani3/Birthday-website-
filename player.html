@@ -31,24 +31,12 @@
       border-radius: 30px; border: 1.5px solid rgba(255, 255, 255, 0.8);
       box-shadow: 0 20px 40px rgba(255, 105, 180, 0.2); z-index: 10;
     }
-    h2 { color: #ff477e; margin-bottom: 12px; font-size: 1.4rem; }
 
-    /* Interactive Gift Box */
-    .gift-box {
-      width: 120px; height: 120px; margin: 20px auto; position: relative; cursor: pointer;
-      animation: bounce 2s infinite ease-in-out;
-    }
-    @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-    .gift-body { width: 100%; height: 100%; background: #ff758c; border-radius: 15px; position: relative; box-shadow: 0 10px 20px rgba(0,0,0,0.15); }
-    .gift-ribbon-v { position: absolute; left: 48px; width: 24px; height: 100%; background: #ffeb3b; }
-    .gift-ribbon-h { position: absolute; top: 48px; width: 100%; height: 24px; background: #ffeb3b; }
-    .gift-bow { position: absolute; top: -20px; left: 35px; font-size: 3rem; }
-
-    /* Handwritten Letter */
+    /* Beautiful Letter Card */
     .letter-card {
       background: #ffffff; padding: 22px 18px; border-radius: 18px;
       box-shadow: 0 10px 25px rgba(255, 182, 193, 0.4); border: 1px solid #ffe4e1;
-      text-align: left; display: none; animation: slideUp 0.6s ease forwards;
+      text-align: left; animation: slideUp 0.6s ease forwards;
     }
     @keyframes slideUp { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
 
@@ -61,7 +49,7 @@
     .btn {
       background: linear-gradient(45deg, #ff758c, #ff7eb3); border: none; color: white;
       padding: 12px 28px; border-radius: 30px; font-weight: bold; cursor: pointer;
-      text-decoration: none; display: inline-block; margin-top: 15px;
+      text-decoration: none; display: inline-block; margin-top: 20px;
       box-shadow: 0 8px 20px rgba(255, 117, 140, 0.4); transition: transform 0.2s;
     }
     .btn:active { transform: scale(0.92); }
@@ -69,21 +57,10 @@
 </head>
 <body>
 
-  <audio id="openSfx" src="https://assets.mixkit.co/active_storage/sfx/2014/2014-preview.mp3" preload="auto"></audio>
+  <audio id="sparkleSfx" src="https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3" preload="auto"></audio>
 
   <div class="container">
-    <h2>💌 A Birthday Surprise</h2>
-
-    <div id="gift" class="gift-box" onclick="openGift()">
-      <div class="gift-bow">🎀</div>
-      <div class="gift-body">
-        <div class="gift-ribbon-v"></div>
-        <div class="gift-ribbon-h"></div>
-      </div>
-    </div>
-    <p id="giftHint" style="color: #ff477e; font-size: 0.85rem; font-weight: bold;">Tap box to unwrap your gift! 🎁</p>
-
-    <div id="letterCard" class="letter-card">
+    <div class="letter-card">
       <div class="letter-content">
         <p><strong>Happy Birthday, Cutiepie! 🎉✨</strong></p>
         <p>I built this little corner of the internet just for you, because a normal card felt far too small to hold all the happiness you bring into my life.</p>
@@ -97,15 +74,10 @@
   </div>
 
   <script>
-    function openGift() {
-      if (navigator.vibrate) navigator.vibrate([80, 40, 80]);
-      document.getElementById('openSfx').play().catch(e => {});
-      document.getElementById('gift').style.display = 'none';
-      document.getElementById('giftHint').style.display = 'none';
-      document.getElementById('letterCard').style.display = 'block';
-
-      confetti({ particleCount: 100, spread: 80, origin: { y: 0.6 } });
-    }
+    window.onload = function() {
+      document.getElementById('sparkleSfx').play().catch(e => {});
+      confetti({ particleCount: 90, spread: 70, origin: { y: 0.6 } });
+    };
 
     function createBgHeart() {
       const h = document.createElement('div');
