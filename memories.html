@@ -2,16 +2,16 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Comfortaa:wght@700&display=swap" rel="stylesheet">
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
     body {
       font-family: 'Comfortaa', cursive, sans-serif;
       background: linear-gradient(-45deg, #ff9a9e, #fecfef, #a1c4fd, #c2e9fb);
       background-size: 400% 400%; animation: gradientBG 12s ease infinite;
       min-height: 100vh; display: flex; justify-content: center; align-items: center; text-align: center;
-      overflow: hidden; position: relative;
+      overflow: hidden; position: relative; perspective: 1000px;
     }
     @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
@@ -30,39 +30,54 @@
       border-radius: 30px; border: 1.5px solid rgba(255, 255, 255, 0.8);
       box-shadow: 0 20px 40px rgba(255, 105, 180, 0.2); z-index: 10;
     }
-    h2 { color: #ff477e; margin-bottom: 15px; font-size: 1.4rem; }
-    
-    /* Realistic Tilted Polaroid Card */
+    h2 { color: #ff477e; margin-bottom: 5px; font-size: 1.4rem; }
+    p.hint { color: #6c5ce7; font-size: 0.8rem; margin-bottom: 12px; }
+
+    /* 3D Flip Polaroid Card */
+    .polaroid-container { perspective: 1000px; width: 100%; margin-bottom: 15px; }
     .polaroid-card {
-      position: relative; background: #ffffff; padding: 12px 12px 25px; border-radius: 8px;
-      box-shadow: 0 12px 25px rgba(0,0,0,0.12); margin-bottom: 18px; transform: rotate(-2deg);
-      transition: transform 0.3s ease;
+      width: 100%; height: 320px; position: relative; transform-style: preserve-3d;
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer;
     }
-    .polaroid-card img { width: 100%; height: 250px; object-fit: cover; border-radius: 4px; }
-    .caption {
-      font-family: 'Caveat', cursive; font-size: 1.4rem; color: #ff477e; margin-top: 10px; font-weight: bold;
+    .polaroid-card.flipped { transform: rotateY(180deg); }
+
+    .card-face {
+      position: absolute; inset: 0; backface-visibility: hidden;
+      background: #ffffff; padding: 12px 12px 20px; border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.12); display: flex; flex-direction: column; align-items: center; justify-content: center;
     }
-    .sticker {
-      position: absolute; top: -10px; right: -10px; font-size: 2.2rem;
-      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.15));
+    .card-front img { width: 100%; height: 230px; object-fit: cover; border-radius: 6px; }
+    .caption { font-family: 'Caveat', cursive; font-size: 1.4rem; color: #ff477e; margin-top: 8px; font-weight: bold; }
+
+    .card-back {
+      transform: rotateY(180deg); background: #fffdf0; padding: 25px; text-align: center;
+      font-family: 'Caveat', cursive; font-size: 1.5rem; color: #ff477e; line-height: 1.4;
     }
+
     .btn {
       background: linear-gradient(45deg, #ff758c, #ff7eb3); border: none; color: white;
       padding: 12px 28px; border-radius: 30px; font-weight: bold; cursor: pointer; text-decoration: none; display: inline-block;
-      box-shadow: 0 8px 20px rgba(255, 117, 140, 0.4);
-      transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 8px 20px rgba(255, 117, 140, 0.4); transition: transform 0.2s;
     }
     .btn:active { transform: scale(0.92); }
   </style>
 </head>
 <body>
+
   <div class="container">
     <h2>📸 Our Memories</h2>
+    <p class="hint">Tap photo to flip for secret note 🔄</p>
     
-    <div class="polaroid-card">
-      <img id="photo" src="images/photo1.jpg" alt="Memory" onerror="this.src='https://via.placeholder.com/300x250?text=Photo+1'">
-      <div class="sticker" id="sticker">💖</div>
-      <div class="caption" id="caption">Best times together ✨</div>
+    <div class="polaroid-container" onclick="flipCard()">
+      <div class="polaroid-card" id="card">
+        <div class="card-face card-front">
+          <img id="photo" src="images/photo1.jpg" alt="Memory" onerror="this.src='https://via.placeholder.com/300x230?text=Photo+1'">
+          <div class="caption" id="caption">Best times together ✨</div>
+        </div>
+        <div class="card-face card-back" id="backNote">
+          You bring so much sunshine into my life every day! ☀️💖
+        </div>
+      </div>
     </div>
 
     <button id="nextBtn" class="btn" onclick="nextPhoto()">Next Photo ➔</button>
@@ -70,29 +85,35 @@
 
   <script>
     const photos = [
-      { src: "images/photo1.jpg", sticker: "💖", caption: "Best times together ✨" },
-      { src: "images/photo2.jpg", sticker: "🌸", caption: "Your gorgeous smile 😊" },
-      { src: "images/photo3.jpg", sticker: "✨", caption: "Unforgettable days 💕" },
-      { src: "images/photo4.jpg", sticker: "💌", caption: "Little precious moments 🎀" },
-      { src: "images/photo5.jpg", sticker: "🎀", caption: "Always laughing with you 🥰" },
-      { src: "images/photo6.jpg", sticker: "🥰", caption: "Pure happiness ❤️" },
-      { src: "images/photo7.jpg", sticker: "👑", caption: "Birthday Queen! 👑" }
+      { src: "images/photo1.jpg", caption: "Best times together ✨", back: "You bring so much sunshine into my life every day! ☀️💖" },
+      { src: "images/photo2.jpg", caption: "Your gorgeous smile 😊", back: "Never stop smiling, it's my absolute favorite thing. 🥰" },
+      { src: "images/photo3.jpg", caption: "Unforgettable days 💕", back: "Every single memory with you is saved in my heart. 🗝️" },
+      { src: "images/photo4.jpg", caption: "Birthday Queen! 👑", back: "Hope all your dreams come true this year! 🌟" }
     ];
     let index = 0;
+    const card = document.getElementById('card');
+
+    function flipCard() {
+      if (navigator.vibrate) navigator.vibrate(30);
+      card.classList.toggle('flipped');
+    }
 
     function nextPhoto() {
-      if (index < photos.length - 1) {
-        index++;
-        document.getElementById('photo').src = photos[index].src;
-        document.getElementById('sticker').innerText = photos[index].sticker;
-        document.getElementById('caption').innerText = photos[index].caption;
-        
-        if (index === photos.length - 1) {
-          const btn = document.getElementById('nextBtn');
-          btn.innerText = "Let's Pop Balloons 🎈";
-          btn.onclick = function() { window.location.href = "wishes.html"; };
+      card.classList.remove('flipped');
+      setTimeout(() => {
+        if (index < photos.length - 1) {
+          index++;
+          document.getElementById('photo').src = photos[index].src;
+          document.getElementById('caption').innerText = photos[index].caption;
+          document.getElementById('backNote').innerText = photos[index].back;
+          
+          if (index === photos.length - 1) {
+            const btn = document.getElementById('nextBtn');
+            btn.innerText = "Pop Balloons 🎈";
+            btn.onclick = function() { window.location.href = "wishes.html"; };
+          }
         }
-      }
+      }, 200);
     }
 
     function createBgHeart() {
