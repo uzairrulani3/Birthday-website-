@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A Surprise For You ✨</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+    body {
+      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      color: #fff; min-height: 100vh; display: flex; justify-content: center; align-items: center; text-align: center; overflow: hidden; position: relative;
+    }
+    /* Floating Hearts Animation */
+    .heart {
+      position: absolute; color: rgba(255, 182, 193, 0.4); font-size: 20px;
+      animation: float 6s linear infinite; bottom: -100px;
+    }
+    @keyframes float {
+      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
+    }
+    .container {
+      width: 90%; max-width: 400px; padding: 30px 20px; background: rgba(255, 255, 255, 0.08);
+      border-radius: 20px; backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 10;
+    }
+    h2 { color: #ffd1dc; margin-bottom: 10px; }
+    p { color: #e0e0e0; margin-bottom: 20px; font-size: 0.9rem; }
+    .pin-display { font-size: 2.2rem; letter-spacing: 12px; margin-bottom: 20px; min-height: 45px; color: #ff7eb3; }
+    .keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; max-width: 250px; margin: 0 auto; }
+    .key {
+      background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2);
+      color: white; font-size: 1.2rem; padding: 15px; border-radius: 50%; cursor: pointer; transition: 0.2s;
+    }
+    .key:hover { background: rgba(255, 255, 255, 0.3); transform: scale(1.05); }
+  </style>
+</head>
+<body>
+
+  <!-- Floating background hearts -->
+  <div class="heart" style="left: 10%; animation-duration: 7s;">💖</div>
+  <div class="heart" style="left: 30%; animation-duration: 5s;">✨</div>
+  <div class="heart" style="left: 60%; animation-duration: 8s;">💕</div>
+  <div class="heart" style="left: 80%; animation-duration: 6s;">✨</div>
+
+  <div class="container">
+    <h2>🔒 Secret Unlock</h2>
+    <p>Enter the secret PIN to open your gift!</p>
+    <div class="pin-display" id="pinDisplay">____</div>
+    <div class="keypad">
+      <button class="key" onclick="pressKey('1')">1</button>
+      <button class="key" onclick="pressKey('2')">2</button>
+      <button class="key" onclick="pressKey('3')">3</button>
+      <button class="key" onclick="pressKey('4')">4</button>
+      <button class="key" onclick="pressKey('5')">5</button>
+      <button class="key" onclick="pressKey('6')">6</button>
+      <button class="key" onclick="pressKey('7')">7</button>
+      <button class="key" onclick="pressKey('8')">8</button>
+      <button class="key" onclick="pressKey('9')">9</button>
+      <button class="key" onclick="clearPin()">C</button>
+      <button class="key" onclick="pressKey('0')">0</button>
+      <button class="key" onclick="checkPin()">✓</button>
+    </div>
+    <p style="margin-top: 15px; font-size: 0.8rem; opacity: 0.6;">(Demo PIN: 1234)</p>
+  </div>
+
+  <script>
+    let currentPin = "";
+    const correctPin = "1234";
+
+    function pressKey(num) {
+      if (currentPin.length < 4) { currentPin += num; updateDisplay(); }
+    }
+    function clearPin() { currentPin = ""; updateDisplay(); }
+    function updateDisplay() { document.getElementById('pinDisplay').innerText = currentPin.padEnd(4, '_'); }
+    function checkPin() {
+      if (currentPin === correctPin) {
+        window.location.href = "cake.html";
+      } else {
+        alert("Incorrect PIN! Try 1234");
+        clearPin();
+      }
+    }
+  </script>
+</body>
+</html>
