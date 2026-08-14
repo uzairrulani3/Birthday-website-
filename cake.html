@@ -10,19 +10,9 @@
       background: linear-gradient(-45deg, #ff9a9e, #fecfef, #a1c4fd, #c2e9fb);
       background-size: 400% 400%; animation: gradientBG 12s ease infinite;
       min-height: 100vh; display: flex; justify-content: center; align-items: center; text-align: center;
-      overflow: hidden; position: relative;
+      overflow: hidden;
     }
     @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-
-    .bg-heart {
-      position: absolute; color: rgba(255, 105, 180, 0.4); font-size: 1.5rem;
-      animation: floatUp 7s linear infinite; pointer-events: none;
-    }
-    @keyframes floatUp {
-      0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
-      50% { opacity: 0.8; }
-      100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
-    }
 
     .container {
       width: 88%; max-width: 380px; padding: 30px 20px; background: rgba(255, 255, 255, 0.6);
@@ -32,19 +22,22 @@
     h2 { color: #ff477e; margin-bottom: 10px; }
     p { color: #555; font-size: 0.95rem; }
     
-    .cake-wrapper { position: relative; width: 170px; margin: 30px auto 15px; }
-    
-    /* Cute vector SVG Birthday Cake */
+    .cake-wrapper { position: relative; width: 170px; margin: 35px auto 15px; }
     .cake-svg { width: 100%; height: auto; display: block; filter: drop-shadow(0 8px 15px rgba(0,0,0,0.1)); }
 
-    /* Animated candle flame */
+    /* Glowing animated flame */
     .flame {
-      position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
-      width: 18px; height: 26px; background: radial-gradient(ellipse at bottom, #ffeb3b 0%, #ff5722 100%);
+      position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+      width: 22px; height: 32px;
+      background: radial-gradient(ellipse at bottom, #ffffff 0%, #ffeb3b 25%, #ff5722 80%, rgba(255,87,34,0) 100%);
       border-radius: 50% 50% 20% 20%; cursor: pointer;
-      box-shadow: 0 0 15px #ff9800; animation: flicker 0.5s infinite alternate;
+      box-shadow: 0 0 20px #ff9800, 0 0 35px #ff5722, 0 0 50px #ffeb3b;
+      animation: flicker 0.6s infinite alternate ease-in-out;
     }
-    @keyframes flicker { 0% { transform: translateX(-50%) scale(1); } 100% { transform: translateX(-50%) scale(1.25); } }
+    @keyframes flicker {
+      0% { transform: translateX(-50%) scale(1) rotate(-2deg); opacity: 0.95; }
+      100% { transform: translateX(-50%) scale(1.25) rotate(2deg); opacity: 1; box-shadow: 0 0 25px #ff9800, 0 0 45px #ff5722; }
+    }
     
     .btn {
       background: linear-gradient(45deg, #ff758c, #ff7eb3); border: none; color: white;
@@ -53,7 +46,6 @@
       box-shadow: 0 5px 15px rgba(255, 117, 140, 0.4);
     }
 
-    /* Falling text rain */
     .rain-drop {
       position: fixed; top: -60px; color: #ff3366; font-weight: 800;
       font-size: 1.1rem; pointer-events: none; animation: fallStraight 3s linear forwards;
@@ -69,29 +61,30 @@
 </head>
 <body>
 
-  <div class="bg-heart" style="left: 10%; animation-delay: 0s;">💖</div>
-  <div class="bg-heart" style="left: 40%; animation-delay: 3s;">✨</div>
-  <div class="bg-heart" style="left: 75%; animation-delay: 1.5s;">💕</div>
-
   <div class="container">
     <h2>🎂 Blow Out The Candle!</h2>
-    <p>Tap the glowing flame to blow breeze & make a wish!</p>
+    <p>Tap the glowing candle flame to blow breeze & make a wish!</p>
     
     <div class="cake-wrapper">
-      <!-- Flame -->
+      <!-- Glowing Candle Flame -->
       <div id="flame" class="flame" onclick="blowCandle()"></div>
       
-      <!-- Guaranteed SVG Birthday Cake Graphic -->
+      <!-- Built-in High Quality Cake SVG -->
       <svg class="cake-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-        <!-- Candle -->
-        <rect x="95" y="35" width="10" height="30" rx="3" fill="#ff7eb3" />
-        <!-- Top Tier -->
-        <path d="M40,110 C40,90 160,90 160,110 L160,120 C160,130 40,130 40,120 Z" fill="#ffb6c1" />
-        <!-- Cake Layers -->
-        <rect x="30" y="115" width="140" height="50" rx="10" fill="#fff0f5" />
-        <path d="M30,135 Q50,145 70,135 T110,135 T150,135 T170,135 L170,120 L30,120 Z" fill="#ff758c" />
+        <!-- Candle Stick -->
+        <rect x="94" y="18" width="12" height="35" rx="4" fill="#ff7eb3" stroke="#ffffff" stroke-width="2" />
+        <!-- Top Cake Frosting -->
+        <path d="M40,110 C40,85 160,85 160,110 L160,120 C160,130 40,130 40,120 Z" fill="#ffb6c1" />
+        <!-- Cake Base Layer -->
+        <rect x="30" y="115" width="140" height="50" rx="12" fill="#fff0f5" />
+        <path d="M30,135 Q50,148 70,135 T110,135 T150,135 T170,135 L170,120 L30,120 Z" fill="#ff758c" />
+        <!-- Decorative Cream Dots -->
+        <circle cx="50" cy="115" r="6" fill="#ffffff" />
+        <circle cx="85" cy="115" r="6" fill="#ffffff" />
+        <circle cx="115" cy="115" r="6" fill="#ffffff" />
+        <circle cx="150" cy="115" r="6" fill="#ffffff" />
         <!-- Plate -->
-        <ellipse cx="100" cy="170" rx="85" ry="12" fill="#e0e0e0" />
+        <ellipse cx="100" cy="168" rx="85" ry="12" fill="#e2e8f0" />
       </svg>
     </div>
 
@@ -101,15 +94,14 @@
     </div>
   </div>
 
-  <audio id="bgSong" loop autoplay src="music/birthday.mp3"></audio>
-
   <script>
-    // Smooth, realistic breeze wind audio synthesizer
+    // Smooth, soft wind breeze synthesizer
     function playBreezeSound() {
       const ctx = new (window.AudioContext || window.webkitAudioContext)();
       const bufferSize = ctx.sampleRate * 1.5;
       const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
       const output = buffer.getChannelData(0);
+      
       for (let i = 0; i < bufferSize; i++) {
         output[i] = Math.random() * 2 - 1;
       }
@@ -119,12 +111,12 @@
 
       const filter = ctx.createBiquadFilter();
       filter.type = 'lowpass';
-      filter.frequency.setValueAtTime(400, ctx.currentTime);
-      filter.frequency.exponentialRampToValueAtTime(100, ctx.currentTime + 1.5);
+      filter.frequency.setValueAtTime(350, ctx.currentTime);
+      filter.frequency.exponentialRampToValueAtTime(80, ctx.currentTime + 1.2);
 
       const gain = ctx.createGain();
-      gain.gain.setValueAtTime(0.3, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 1.5);
+      gain.gain.setValueAtTime(0.25, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 1.2);
 
       whiteNoise.connect(filter);
       filter.connect(gain);
