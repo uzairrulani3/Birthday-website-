@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Our Memories 📸</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+    body {
+      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      color: #fff; min-height: 100vh; display: flex; justify-content: center; align-items: center; text-align: center;
+    }
+    .container {
+      width: 90%; max-width: 400px; padding: 25px 20px; background: rgba(255, 255, 255, 0.08);
+      border-radius: 20px; backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+    h2 { color: #ffd1dc; margin-bottom: 15px; }
+    .card { background: rgba(255,255,255,0.1); padding: 12px; border-radius: 15px; margin-bottom: 15px; }
+    .card img { width: 100%; height: 250px; object-fit: cover; border-radius: 10px; }
+    .caption { margin-top: 10px; font-size: 0.95rem; color: #f0f0f0; }
+    .btn {
+      background: linear-gradient(45deg, #ff758c, #ff7eb3); border: none; color: white;
+      padding: 12px 25px; border-radius: 25px; font-weight: bold; cursor: pointer;
+      text-decoration: none; display: inline-block; margin: 5px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>📸 Cute Memories</h2>
+    <div class="card">
+      <img id="photo" src="photo1.jpg" alt="Memory" onerror="this.src='https://via.placeholder.com/300x250?text=Add+photo1.jpg+here'">
+      <p class="caption" id="caption">Quiet moments holding you close. ❤️</p>
+    </div>
+
+    <button class="btn" onclick="nextPhoto()">Next Photo ➔</button>
+    <br>
+    <a href="wishes.html" class="btn" style="background: rgba(255,255,255,0.2); margin-top: 10px;">Skip to Game 🎈</a>
+  </div>
+
+  <script>
+    const photos = [
+      { src: "photo1.jpg", text: "Quiet moments holding you close. ❤️" },
+      { src: "photo2.jpg", text: "Cooking together and laughing at our mess. 🍝" },
+      { src: "photo3.jpg", text: "Ice cream on a sunny afternoon stroll. 🍦" }
+    ];
+    let index = 0;
+
+    function nextPhoto() {
+      index = (index + 1) % photos.length;
+      document.getElementById('photo').src = photos[index].src;
+      document.getElementById('caption').innerText = photos[index].text;
+    }
+  </script>
+</body>
+</html>
