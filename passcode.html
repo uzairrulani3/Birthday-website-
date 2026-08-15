@@ -5,7 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Secret Passcode 🔒</title>
   <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
+    /* Theme 1: Default Pink */
     :root {
       --bg-gradient: linear-gradient(-45deg, #ff9a9e, #fecfef, #a1c4fd, #c2e9fb);
       --text-main: #ff477e;
@@ -13,11 +15,20 @@
       --card-bg: rgba(255, 255, 255, 0.55);
     }
 
+    /* Theme 2: Dark Velvet */
     [data-theme="dark"] {
       --bg-gradient: linear-gradient(-45deg, #0f172a, #1e1b4b, #311042, #181825);
       --text-main: #ff758c;
       --text-sub: #a78bfa;
       --card-bg: rgba(30, 27, 75, 0.65);
+    }
+
+    /* Theme 3: Mint Blossom */
+    [data-theme="mint"] {
+      --bg-gradient: linear-gradient(-45deg, #a8edd9, #fed6e3, #d4fc79, #96e6a1);
+      --text-main: #2b7a78;
+      --text-sub: #172a3a;
+      --card-bg: rgba(255, 255, 255, 0.65);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Comfortaa', cursive, sans-serif; user-select: none; }
@@ -106,19 +117,27 @@
 
     function checkPin() {
       if (currentPin === correctPin) {
-        window.location.href = "cake.html";
+        // Confetti effect before redirect
+        confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+        if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+        setTimeout(() => {
+          window.location.href = "cake.html";
+        }, 800);
       } else {
         alert("Wrong Code! Try again 💖");
         clearPin();
       }
     }
 
+    // 3 Themes Cycle: Default -> Dark -> Mint -> Default
     function switchTheme() {
       const currentTheme = document.body.getAttribute('data-theme');
-      if (currentTheme === 'dark') {
-        document.body.removeAttribute('data-theme');
-      } else {
+      if (!currentTheme) {
         document.body.setAttribute('data-theme', 'dark');
+      } else if (currentTheme === 'dark') {
+        document.body.setAttribute('data-theme', 'mint');
+      } else {
+        document.body.removeAttribute('data-theme');
       }
     }
 
