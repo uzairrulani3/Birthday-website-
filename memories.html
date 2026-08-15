@@ -11,113 +11,142 @@
       font-family: 'Comfortaa', cursive, sans-serif;
       background: linear-gradient(-45deg, #ff9a9e, #fecfef, #a1c4fd, #c2e9fb);
       background-size: 400% 400%; animation: gradientBG 12s ease infinite;
-      min-height: 100vh; padding: 30px 15px 50px; text-align: center; overflow-x: hidden;
+      min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center; overflow: hidden; padding: 20px 0;
     }
     @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
-    h1 { color: #ff477e; font-size: 1.6rem; margin-bottom: 5px; }
-    p.sub-title { color: #6c5ce7; font-size: 0.85rem; margin-bottom: 25px; }
+    h1 { color: #ff477e; font-size: 1.5rem; margin-bottom: 4px; }
+    p.sub-title { color: #6c5ce7; font-size: 0.8rem; margin-bottom: 20px; }
 
-    .gallery-grid {
-      display: flex; flex-direction: column; align-items: center; gap: 25px;
-      max-width: 400px; margin: 0 auto;
+    /* 3D Flip Card Container */
+    .card-container {
+      width: 280px; height: 380px; perspective: 1000px;
+      cursor: pointer; margin-bottom: 20px;
     }
 
-    .polaroid {
-      background: #ffffff; padding: 12px 12px 18px; border-radius: 8px;
-      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15); width: 88%; max-width: 310px;
-      position: relative; transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    
-    /* Playful Polaroid Rotations */
-    .polaroid:nth-child(odd) { transform: rotate(-2deg); }
-    .polaroid:nth-child(even) { transform: rotate(2.5deg); }
-    .polaroid:hover, .polaroid:active { transform: scale(1.03) rotate(0deg); z-index: 10; box-shadow: 0 15px 30px rgba(0,0,0,0.22); }
-
-    .polaroid-img {
-      width: 100%; height: 260px; object-fit: cover; border-radius: 4px;
-      background: #eee; display: block;
+    .card-inner {
+      width: 100%; height: 100%; position: relative;
+      transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
     }
 
-    .caption {
-      font-family: 'Caveat', cursive; font-size: 1.35rem; color: #ff477e;
-      margin-top: 10px; line-height: 1.2; font-weight: bold;
+    .card-container.flipped .card-inner {
+      transform: rotateY(180deg);
     }
 
-    .pin {
-      position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
-      width: 16px; height: 16px; background: #ff758c; border-radius: 50%;
-      box-shadow: 0 3px 6px rgba(0,0,0,0.3); border: 2px solid white;
+    .card-front, .card-back {
+      position: absolute; width: 100%; height: 100%;
+      backface-visibility: hidden; border-radius: 16px;
+      background: #ffffff; padding: 12px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
     }
+
+    /* Front: Photo */
+    .card-front img {
+      width: 100%; height: 82%; object-fit: cover; border-radius: 10px;
+    }
+
+    .tap-hint {
+      margin-top: 10px; font-size: 0.75rem; color: #ff477e; font-weight: bold;
+    }
+
+    /* Back: Note */
+    .card-back {
+      transform: rotateY(180deg);
+      background: #fff0f5; border: 2px dashed #ff758c;
+      padding: 25px 20px; text-align: center; justify-content: center;
+    }
+
+    .note-title {
+      font-size: 1.1rem; color: #ff477e; margin-bottom: 12px; font-weight: bold;
+    }
+
+    .note-text {
+      font-family: 'Caveat', cursive; font-size: 1.45rem; color: #4a4a4a;
+      line-height: 1.4; font-weight: bold;
+    }
+
+    /* Navigation Controls */
+    .controls { display: flex; gap: 12px; align-items: center; }
 
     .btn {
       background: linear-gradient(45deg, #ff758c, #ff7eb3); border: none; color: white;
-      padding: 14px 32px; border-radius: 30px; font-weight: bold; cursor: pointer;
-      text-decoration: none; display: inline-block; margin-top: 35px;
-      box-shadow: 0 8px 20px rgba(255, 117, 140, 0.4); transition: transform 0.2s;
+      padding: 12px 24px; border-radius: 30px; font-weight: bold; cursor: pointer;
+      text-decoration: none; display: inline-block; font-size: 0.85rem;
+      box-shadow: 0 6px 16px rgba(255, 117, 140, 0.4); transition: transform 0.2s;
     }
     .btn:active { transform: scale(0.92); }
+
+    .btn-next { background: linear-gradient(45deg, #6c5ce7, #a78bfa); }
   </style>
 </head>
 <body>
 
-  <h1>Our Memories 📸</h1>
-  <p class="sub-title">A few of my favorite moments with you 💕</p>
+  <h1 id="photoCounter">Photo 1 of 7</h1>
+  <p class="sub-title">Tap card to read note 💌</p>
 
-  <div class="gallery-grid">
-    
-    <!-- Photo 1 -->
-    <div class="polaroid">
-      <div class="pin"></div>
-      <img src="photo1.jpg" alt="Memory 1" class="polaroid-img">
-      <div class="caption">Where it all began ✨</div>
+  <div class="card-container" id="card" onclick="flipCard()">
+    <div class="card-inner">
+      <!-- Front Side -->
+      <div class="card-front">
+        <img id="photoImg" src="photo1.jpg" alt="Memory Photo">
+        <span class="tap-hint">Tap to flip 🔄</span>
+      </div>
+      <!-- Back Side -->
+      <div class="card-back">
+        <div class="note-title">Memory Note 📝</div>
+        <div class="note-text" id="noteText">Where it all began ✨</div>
+      </div>
     </div>
-
-    <!-- Photo 2 -->
-    <div class="polaroid">
-      <div class="pin"></div>
-      <img src="photo2.jpg" alt="Memory 2" class="polaroid-img">
-      <div class="caption">Your beautiful smile 😍</div>
-    </div>
-
-    <!-- Photo 3 -->
-    <div class="polaroid">
-      <div class="pin"></div>
-      <img src="photo3.jpg" alt="Memory 3" class="polaroid-img">
-      <div class="caption">Late night laughs & talks 🌙</div>
-    </div>
-
-    <!-- Photo 4 -->
-    <div class="polaroid">
-      <div class="pin"></div>
-      <img src="photo4.jpg" alt="Memory 4" class="polaroid-img">
-      <div class="caption">Silly little adventures 🚗</div>
-    </div>
-
-    <!-- Photo 5 -->
-    <div class="polaroid">
-      <div class="pin"></div>
-      <img src="photo5.jpg" alt="Memory 5" class="polaroid-img">
-      <div class="caption">Forever my favorite person 💖</div>
-    </div>
-
-    <!-- Photo 6 -->
-    <div class="polaroid">
-      <div class="pin"></div>
-      <img src="photo6.jpg" alt="Memory 6" class="polaroid-img">
-      <div class="caption">Making core memories 🌸</div>
-    </div>
-
-    <!-- Photo 7 -->
-    <div class="polaroid">
-      <div class="pin"></div>
-      <img src="photo7.jpg" alt="Memory 7" class="polaroid-img">
-      <div class="caption">To many more years together! 🥂</div>
-    </div>
-
   </div>
 
-  <a href="player.html" class="btn">Read Special Letter 💌</a>
+  <div class="controls">
+    <button class="btn btn-next" onclick="nextPhoto()">Next Photo ➔</button>
+    <a href="player.html" class="btn" id="letterBtn" style="display: none;">Letter 💌</a>
+  </div>
 
+  <script>
+    const memories = [
+      { img: "photo1.jpg", note: "Where it all began ✨" },
+      { img: "photo2.jpg", note: "Your beautiful smile 😍" },
+      { img: "photo3.jpg", note: "Late night laughs & talks 🌙" },
+      { img: "photo4.jpg", note: "Silly little adventures 🚗" },
+      { img: "photo5.jpg", note: "Forever my favorite person 💖" },
+      { img: "photo6.jpg", note: "Making core memories 🌸" },
+      { img: "photo7.jpg", note: "To many more years together! 🥂" }
+    ];
+
+    let currentIndex = 0;
+    const card = document.getElementById('card');
+    const photoImg = document.getElementById('photoImg');
+    const noteText = document.getElementById('noteText');
+    const photoCounter = document.getElementById('photoCounter');
+    const letterBtn = document.getElementById('letterBtn');
+
+    function flipCard() {
+      card.classList.toggle('flipped');
+      if (navigator.vibrate) navigator.vibrate(40);
+    }
+
+    function nextPhoto() {
+      // Unflip card if it's open
+      card.classList.remove('flipped');
+
+      setTimeout(() => {
+        currentIndex = (currentIndex + 1) % memories.length;
+        
+        // Update photo and note content
+        photoImg.src = memories[currentIndex].img;
+        noteText.innerText = memories[currentIndex].note;
+        photoCounter.innerText = `Photo ${currentIndex + 1} of ${memories.length}`;
+
+        // Show letter button on reaching final photo
+        if (currentIndex === memories.length - 1) {
+          letterBtn.style.display = 'inline-block';
+        }
+      }, 250);
+    }
+  </script>
 </body>
 </html>
