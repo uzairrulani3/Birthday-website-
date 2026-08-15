@@ -3,150 +3,93 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Our Memories 📸</title>
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Comfortaa:wght@700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
     body {
       font-family: 'Comfortaa', cursive, sans-serif;
       background: linear-gradient(-45deg, #ff9a9e, #fecfef, #a1c4fd, #c2e9fb);
       background-size: 400% 400%; animation: gradientBG 12s ease infinite;
-      min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
-      text-align: center; overflow: hidden; padding: 20px 0;
+      min-height: 100vh; display: flex; justify-content: center; align-items: center; text-align: center;
+      overflow: hidden; position: relative; padding: 20px 0;
     }
     @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
-    h1 { color: #ff477e; font-size: 1.5rem; margin-bottom: 4px; }
-    p.sub-title { color: #6c5ce7; font-size: 0.8rem; margin-bottom: 20px; }
-
-    /* 3D Flip Card Container */
-    .card-container {
-      width: 280px; height: 380px; perspective: 1000px;
-      cursor: pointer; margin-bottom: 20px;
+    .bg-heart {
+      position: absolute; bottom: -30px; font-size: 1.2rem; pointer-events: none;
+      animation: floatUp 6s linear infinite; opacity: 0.7; z-index: 1;
+    }
+    @keyframes floatUp {
+      0% { transform: translateY(0) scale(0.8) rotate(0deg); opacity: 0.8; }
+      100% { transform: translateY(-105vh) scale(1.3) rotate(360deg); opacity: 0; }
     }
 
-    .card-inner {
-      width: 100%; height: 100%; position: relative;
-      transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+    .container {
+      width: 88%; max-width: 370px; padding: 25px 20px;
+      background: rgba(255, 255, 255, 0.45); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-radius: 30px; border: 1.5px solid rgba(255, 255, 255, 0.8);
+      box-shadow: 0 20px 40px rgba(255, 105, 180, 0.2); z-index: 10;
     }
 
-    .card-container.flipped .card-inner {
-      transform: rotateY(180deg);
+    /* Beautiful Letter Card */
+    .letter-card {
+      background: #ffffff; padding: 22px 18px; border-radius: 18px;
+      box-shadow: 0 10px 25px rgba(255, 182, 193, 0.4); border: 1px solid #ffe4e1;
+      text-align: left; animation: slideUp 0.6s ease forwards;
     }
+    @keyframes slideUp { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
 
-    .card-front, .card-back {
-      position: absolute; width: 100%; height: 100%;
-      backface-visibility: hidden; border-radius: 16px;
-      background: #ffffff; padding: 12px;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
+    .letter-content {
+      font-family: 'Caveat', cursive; color: #4a4a4a; line-height: 1.55; font-size: 1.25rem;
     }
-
-    /* Front: Photo */
-    .card-front img {
-      width: 100%; height: 82%; object-fit: cover; border-radius: 10px;
-    }
-
-    .tap-hint {
-      margin-top: 10px; font-size: 0.75rem; color: #ff477e; font-weight: bold;
-    }
-
-    /* Back: Note */
-    .card-back {
-      transform: rotateY(180deg);
-      background: #fff0f5; border: 2px dashed #ff758c;
-      padding: 25px 20px; text-align: center; justify-content: center;
-    }
-
-    .note-title {
-      font-size: 1.1rem; color: #ff477e; margin-bottom: 12px; font-weight: bold;
-    }
-
-    .note-text {
-      font-family: 'Caveat', cursive; font-size: 1.45rem; color: #4a4a4a;
-      line-height: 1.4; font-weight: bold;
-    }
-
-    /* Navigation Controls */
-    .controls { display: flex; gap: 12px; align-items: center; }
-
+    .letter-content p { margin-bottom: 10px; }
+    .signature { text-align: right; font-weight: bold; color: #ff477e; margin-top: 12px; font-size: 1.4rem; }
+    
     .btn {
       background: linear-gradient(45deg, #ff758c, #ff7eb3); border: none; color: white;
-      padding: 12px 24px; border-radius: 30px; font-weight: bold; cursor: pointer;
-      text-decoration: none; display: inline-block; font-size: 0.85rem;
-      box-shadow: 0 6px 16px rgba(255, 117, 140, 0.4); transition: transform 0.2s;
+      padding: 12px 28px; border-radius: 30px; font-weight: bold; cursor: pointer;
+      text-decoration: none; display: inline-block; margin-top: 20px;
+      box-shadow: 0 8px 20px rgba(255, 117, 140, 0.4); transition: transform 0.2s;
     }
     .btn:active { transform: scale(0.92); }
-
-    .btn-next { background: linear-gradient(45deg, #6c5ce7, #a78bfa); }
   </style>
 </head>
 <body>
 
-  <h1 id="photoCounter">Photo 1 of 7</h1>
-  <p class="sub-title">Tap card to read note 💌</p>
+  <audio id="sparkleSfx" src="https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3" preload="auto"></audio>
 
-  <div class="card-container" id="card" onclick="flipCard()">
-    <div class="card-inner">
-      <!-- Front Side -->
-      <div class="card-front">
-        <img id="photoImg" src="photo1.jpg" alt="Memory Photo">
-        <span class="tap-hint">Tap to flip 🔄</span>
-      </div>
-      <!-- Back Side -->
-      <div class="card-back">
-        <div class="note-title">Memory Note 📝</div>
-        <div class="note-text" id="noteText">Where it all began ✨</div>
+  <div class="container">
+    <div class="letter-card">
+      <div class="letter-content">
+        <p><strong>Happy Birthday, Cutiepie! 🎉✨</strong></p>
+        <p>I built this little corner of the internet just for you, because a normal card felt far too small to hold all the happiness you bring into my life.</p>
+        <p>Thank you for all the golden memories, late-night laughs, silly jokes, and every ordinary day you quietly make extraordinary.</p>
+        <p>Here’s to another wonderful year full of magic, smiles, and endless adventures!</p>
+        <div class="signature">With all my love, always ❤️</div>
       </div>
     </div>
-  </div>
 
-  <div class="controls">
-    <button class="btn btn-next" onclick="nextPhoto()">Next Photo ➔</button>
-    <a href="player.html" class="btn" id="letterBtn" style="display: none;">Letter 💌</a>
+    <a href="passcode.html" class="btn">Replay Surprise 🔄</a>
   </div>
 
   <script>
-    const memories = [
-      { img: "photo1.jpg", note: "Where it all began ✨" },
-      { img: "photo2.jpg", note: "Your beautiful smile 😍" },
-      { img: "photo3.jpg", note: "Late night laughs & talks 🌙" },
-      { img: "photo4.jpg", note: "Silly little adventures 🚗" },
-      { img: "photo5.jpg", note: "Forever my favorite person 💖" },
-      { img: "photo6.jpg", note: "Making core memories 🌸" },
-      { img: "photo7.jpg", note: "To many more years together! 🥂" }
-    ];
+    window.onload = function() {
+      document.getElementById('sparkleSfx').play().catch(e => {});
+      confetti({ particleCount: 90, spread: 70, origin: { y: 0.6 } });
+    };
 
-    let currentIndex = 0;
-    const card = document.getElementById('card');
-    const photoImg = document.getElementById('photoImg');
-    const noteText = document.getElementById('noteText');
-    const photoCounter = document.getElementById('photoCounter');
-    const letterBtn = document.getElementById('letterBtn');
-
-    function flipCard() {
-      card.classList.toggle('flipped');
-      if (navigator.vibrate) navigator.vibrate(40);
+    function createBgHeart() {
+      const h = document.createElement('div');
+      h.classList.add('bg-heart');
+      const icons = ['💗', '💖', '✨', '🌸', '💕'];
+      h.innerText = icons[Math.floor(Math.random() * icons.length)];
+      h.style.left = Math.random() * 90 + 5 + "vw";
+      h.style.animationDuration = Math.random() * 3 + 4 + "s";
+      document.body.appendChild(h);
+      setTimeout(() => h.remove(), 7000);
     }
-
-    function nextPhoto() {
-      // Unflip card if it's open
-      card.classList.remove('flipped');
-
-      setTimeout(() => {
-        currentIndex = (currentIndex + 1) % memories.length;
-        
-        // Update photo and note content
-        photoImg.src = memories[currentIndex].img;
-        noteText.innerText = memories[currentIndex].note;
-        photoCounter.innerText = `Photo ${currentIndex + 1} of ${memories.length}`;
-
-        // Show letter button on reaching final photo
-        if (currentIndex === memories.length - 1) {
-          letterBtn.style.display = 'inline-block';
-        }
-      }, 250);
-    }
+    setInterval(createBgHeart, 450);
   </script>
 </body>
 </html>
