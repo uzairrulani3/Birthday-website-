@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Comfortaa:wght@700&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
     body {
@@ -12,7 +11,7 @@
       background: linear-gradient(-45deg, #ff9a9e, #fecfef, #a1c4fd, #c2e9fb);
       background-size: 400% 400%; animation: gradientBG 12s ease infinite;
       min-height: 100vh; display: flex; justify-content: center; align-items: center; text-align: center;
-      overflow: hidden; position: relative; padding: 20px 0;
+      overflow: hidden; position: relative; perspective: 1000px;
     }
     @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
@@ -31,25 +30,33 @@
       border-radius: 30px; border: 1.5px solid rgba(255, 255, 255, 0.8);
       box-shadow: 0 20px 40px rgba(255, 105, 180, 0.2); z-index: 10;
     }
+    h2 { color: #ff477e; margin-bottom: 5px; font-size: 1.4rem; }
+    p.hint { color: #6c5ce7; font-size: 0.8rem; margin-bottom: 12px; }
 
-    /* Beautiful Letter Card */
-    .letter-card {
-      background: #ffffff; padding: 22px 18px; border-radius: 18px;
-      box-shadow: 0 10px 25px rgba(255, 182, 193, 0.4); border: 1px solid #ffe4e1;
-      text-align: left; animation: slideUp 0.6s ease forwards;
+    /* 3D Flip Polaroid Card */
+    .polaroid-container { perspective: 1000px; width: 100%; margin-bottom: 15px; }
+    .polaroid-card {
+      width: 100%; height: 320px; position: relative; transform-style: preserve-3d;
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer;
     }
-    @keyframes slideUp { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
+    .polaroid-card.flipped { transform: rotateY(180deg); }
 
-    .letter-content {
-      font-family: 'Caveat', cursive; color: #4a4a4a; line-height: 1.55; font-size: 1.25rem;
+    .card-face {
+      position: absolute; inset: 0; backface-visibility: hidden;
+      background: #ffffff; padding: 12px 12px 20px; border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.12); display: flex; flex-direction: column; align-items: center; justify-content: center;
     }
-    .letter-content p { margin-bottom: 10px; }
-    .signature { text-align: right; font-weight: bold; color: #ff477e; margin-top: 12px; font-size: 1.4rem; }
-    
+    .card-front img { width: 100%; height: 230px; object-fit: cover; border-radius: 6px; }
+    .caption { font-family: 'Caveat', cursive; font-size: 1.4rem; color: #ff477e; margin-top: 8px; font-weight: bold; }
+
+    .card-back {
+      transform: rotateY(180deg); background: #fffdf0; padding: 25px; text-align: center;
+      font-family: 'Caveat', cursive; font-size: 1.5rem; color: #ff477e; line-height: 1.4;
+    }
+
     .btn {
       background: linear-gradient(45deg, #ff758c, #ff7eb3); border: none; color: white;
-      padding: 12px 28px; border-radius: 30px; font-weight: bold; cursor: pointer;
-      text-decoration: none; display: inline-block; margin-top: 20px;
+      padding: 12px 28px; border-radius: 30px; font-weight: bold; cursor: pointer; text-decoration: none; display: inline-block;
       box-shadow: 0 8px 20px rgba(255, 117, 140, 0.4); transition: transform 0.2s;
     }
     .btn:active { transform: scale(0.92); }
@@ -57,27 +64,57 @@
 </head>
 <body>
 
-  <audio id="sparkleSfx" src="https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3" preload="auto"></audio>
-
   <div class="container">
-    <div class="letter-card">
-      <div class="letter-content">
-        <p><strong>Happy Birthday, Cutiepie! 🎉✨</strong></p>
-        <p>I built this little corner of the internet just for you, because a normal card felt far too small to hold all the happiness you bring into my life.</p>
-        <p>Thank you for all the golden memories, late-night laughs, silly jokes, and every ordinary day you quietly make extraordinary.</p>
-        <p>Here’s to another wonderful year full of magic, smiles, and endless adventures!</p>
-        <div class="signature">With all my love, always ❤️</div>
+    <h2>📸 Our Memories</h2>
+    <p class="hint">Tap photo to flip for secret note 🔄</p>
+    
+    <div class="polaroid-container" onclick="flipCard()">
+      <div class="polaroid-card" id="card">
+        <div class="card-face card-front">
+          <img id="photo" src="images/photo1.jpg" alt="Memory" onerror="this.src='https://via.placeholder.com/300x230?text=Photo+1'">
+          <div class="caption" id="caption">Best times together ✨</div>
+        </div>
+        <div class="card-face card-back" id="backNote">
+          You bring so much sunshine into my life every day! ☀️💖
+        </div>
       </div>
     </div>
 
-    <a href="passcode.html" class="btn">Replay Surprise 🔄</a>
+    <button id="nextBtn" class="btn" onclick="nextPhoto()">Next Photo ➔</button>
   </div>
 
   <script>
-    window.onload = function() {
-      document.getElementById('sparkleSfx').play().catch(e => {});
-      confetti({ particleCount: 90, spread: 70, origin: { y: 0.6 } });
-    };
+    const photos = [
+      { src: "images/photo1.jpg", caption: "Best times together ✨", back: "You bring so much sunshine into my life every day! ☀️💖" },
+      { src: "images/photo2.jpg", caption: "Your gorgeous smile 😊", back: "Never stop smiling, it's my absolute favorite thing. 🥰" },
+      { src: "images/photo3.jpg", caption: "Unforgettable days 💕", back: "Every single memory with you is saved in my heart. 🗝️" },
+      { src: "images/photo4.jpg", caption: "Birthday Queen! 👑", back: "Hope all your dreams come true this year! 🌟" }
+    ];
+    let index = 0;
+    const card = document.getElementById('card');
+
+    function flipCard() {
+      if (navigator.vibrate) navigator.vibrate(30);
+      card.classList.toggle('flipped');
+    }
+
+    function nextPhoto() {
+      card.classList.remove('flipped');
+      setTimeout(() => {
+        if (index < photos.length - 1) {
+          index++;
+          document.getElementById('photo').src = photos[index].src;
+          document.getElementById('caption').innerText = photos[index].caption;
+          document.getElementById('backNote').innerText = photos[index].back;
+          
+          if (index === photos.length - 1) {
+            const btn = document.getElementById('nextBtn');
+            btn.innerText = "Pop Balloons 🎈";
+            btn.onclick = function() { window.location.href = "wishes.html"; };
+          }
+        }
+      }, 200);
+    }
 
     function createBgHeart() {
       const h = document.createElement('div');
