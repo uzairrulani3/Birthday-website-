@@ -62,13 +62,22 @@
       z-index: 4;
     }
 
-    /* Letter Inside Envelope */
+    /* Letter Inside Envelope (Upgraded with Scrolling) */
     .letter {
       position: absolute; bottom: 10px; left: 15px; width: 210px; height: 135px;
       background: #ffffff; border-radius: 10px; padding: 15px 12px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1); text-align: left;
       transition: transform 0.6s ease-in-out, height 0.6s ease-in-out, z-index 0.1s ease;
-      z-index: 3; overflow: hidden;
+      z-index: 3; overflow-y: auto; -webkit-overflow-scrolling: touch;
+    }
+
+    /* Hide scrollbar for a cleaner aesthetic while keeping scroll active */
+    .letter::-webkit-scrollbar {
+      width: 4px;
+    }
+    .letter::-webkit-scrollbar-thumb {
+      background: rgba(255, 117, 140, 0.5);
+      border-radius: 10px;
     }
 
     .letter-content {
