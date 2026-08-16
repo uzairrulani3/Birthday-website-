@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Comfortaa', cursive, sans-serif; user-select: none; }
     body {
@@ -32,19 +33,39 @@
     h2 { color: #ff477e; margin-bottom: 8px; font-size: 1.4rem; }
     p { color: #6c5ce7; font-size: 0.9rem; }
     .balloon-box { display: flex; justify-content: space-around; margin: 25px 0; }
+    
     .balloon {
       width: 60px; height: 75px; border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
       cursor: pointer; position: relative; animation: bounce 1.8s infinite alternate;
-      box-shadow: inset -5px -5px 10px rgba(0,0,0,0.1);
+      box-shadow: inset -5px -5px 10px rgba(0,0,0,0.1); transition: transform 0.15s ease, opacity 0.2s ease;
     }
     @keyframes bounce { 0% { transform: translateY(0); } 100% { transform: translateY(-10px); } }
     .balloon::after { content: '📍'; position: absolute; bottom: -12px; left: 22px; font-size: 10px; }
-    .balloon.popped { visibility: hidden; }
     
+    /* Popping scale animation effect */
+    .balloon.pop-anim {
+      transform: scale(1.4) !important;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* Pop Particle Emoji FX */
+    .pop-particle {
+      position: absolute; pointer-events: none; font-size: 1.2rem;
+      animation: popBurst 0.8s ease-out forwards; z-index: 100;
+    }
+    @keyframes popBurst {
+      0% { transform: translate(0, 0) scale(0.5); opacity: 1; }
+      100% { transform: translate(var(--dx), var(--dy)) scale(1.2); opacity: 0; }
+    }
+
     .wish-display {
       min-height: 80px; color: #ff2a6d; font-weight: bold; font-size: 1.05rem;
       margin-bottom: 20px; display: flex; align-items: center; justify-content: center; line-height: 1.4;
+      transition: transform 0.2s ease;
     }
+    .wish-display.bump { transform: scale(1.08); }
+
     .btn {
       background: linear-gradient(45deg, #ff758c, #ff7eb3); border: none; color: white;
       padding: 12px 28px; border-radius: 30px; font-weight: bold; cursor: pointer; text-decoration: none; display: inline-block;
@@ -63,9 +84,9 @@
     <p>Tap a balloon to unlock sweet wishes ✨</p>
 
     <div class="balloon-box">
-      <div class="balloon" style="background: #ff758c;" onclick="pop(this, 'May your life be filled with warmth & sweet smiles! ✨🌸')"></div>
-      <div class="balloon" style="background: #ff7eb3; animation-delay: 0.4s;" onclick="pop(this, 'Wishing you all the happiness & magic in the world! 💕🧸')"></div>
-      <div class="balloon" style="background: #a88beb; animation-delay: 0.8s;" onclick="pop(this, 'Always keep shining bright like a sweet star! 🌟💖')"></div>
+      <div class="balloon" style="background: #ff758c;" onclick="pop(this, 'May your life be filled with warmth & sweet smiles! ✨🌸', '#ff758c')"></div>
+      <div class="balloon" style="background: #ff7eb3; animation-delay: 0.4s;" onclick="pop(this, 'Wishing you all the happiness & magic in the world! 💕🧸', '#ff7eb3')"></div>
+      <div class="balloon" style="background: #a88beb; animation-delay: 0.8s;" onclick="pop(this, 'Always keep shining bright like a sweet star! 🌟💖', '#a88beb')"></div>
     </div>
 
     <div class="wish-display" id="wishText">Tap any balloon above...</div>
@@ -74,13 +95,61 @@
   </div>
 
   <script>
-    function pop(element, wish) {
-      if (navigator.vibrate) navigator.vibrate(50);
+    function pop(element, wish, color) {
+      if (element.classList.contains('pop-anim')) return;
+
+      if (navigator.vibrate) navigator.vibrate([40, 30, 40]);
+      
       const sfx = document.getElementById('popSfx');
       sfx.currentTime = 0;
       sfx.play().catch(e => {});
-      element.classList.add('popped');
-      document.getElementById('wishText').innerText = wish;
+
+      // Calculate position for confetti & particles
+      const rect = element.getBoundingClientRect();
+      const x = (rect.left + rect.width / 2) / window.innerWidth;
+      const y = (rect.top + rect.height / 2) / window.innerHeight;
+
+      // Confetti burst on balloon center
+      confetti({
+        particleCount: 40,
+        spread: 60,
+        origin: { x: x, y: y },
+        colors: [color, '#ffffff', '#ffd1dc']
+      });
+
+      // Spawn Cute Floating Particles
+      createBurstParticles(rect.left + rect.width / 2, rect.top + rect.height / 2);
+
+      // Balloon pop visual scale down
+      element.classList.add('pop-anim');
+
+      // Update text with a light pulse animation
+      const wishDisplay = document.getElementById('wishText');
+      wishDisplay.innerText = wish;
+      wishDisplay.classList.add('bump');
+      setTimeout(() => wishDisplay.classList.remove('bump'), 200);
+    }
+
+    function createBurstParticles(cx, cy) {
+      const emojis = ['✨', '💖', '🌸', '🎉', '💕'];
+      for (let i = 0; i < 6; i++) {
+        const p = document.createElement('div');
+        p.classList.add('pop-particle');
+        p.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+        
+        const angle = (i / 6) * Math.PI * 2;
+        const dist = 50 + Math.random() * 30;
+        const dx = Math.cos(angle) * dist + "px";
+        const dy = Math.sin(angle) * dist + "px";
+
+        p.style.left = cx + "px";
+        p.style.top = cy + "px";
+        p.style.setProperty('--dx', dx);
+        p.style.setProperty('--dy', dy);
+
+        document.body.appendChild(p);
+        setTimeout(() => p.remove(), 800);
+      }
     }
 
     function createBgHeart() {
