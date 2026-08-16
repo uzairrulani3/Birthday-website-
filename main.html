@@ -78,9 +78,9 @@
 
   <script>
     const playlist = [
-      { name: "Tu hi mera", src: "music/birthday1.mp3" },
-      { name: "Inaam", src: "music/birthday2.mp3" },
-      { name: "Aarzu", src: "music/birthday3.mp3" }
+      { name: "Tu hi mera", src: "music/birthday1.mp3", startTime: 11 },
+      { name: "Dooron Dooron", src: "music/birthday2.mp3", startTime: 35 },
+      { name: "Tu chahiye", src: "music/birthday3.mp3", startTime: 118 }
     ];
     let songIndex = 0;
     const music = document.getElementById("bgm");
@@ -92,6 +92,9 @@
     function loadSong(index) {
       music.src = playlist[index].src;
       songTitle.innerText = playlist[index].name;
+      
+      // Set timestamp once loaded
+      music.currentTime = playlist[index].startTime;
     }
     loadSong(songIndex);
 
