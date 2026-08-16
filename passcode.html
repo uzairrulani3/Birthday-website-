@@ -7,46 +7,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
-    /* Theme 1: Default Pink */
-    :root {
-      --bg-gradient: linear-gradient(-45deg, #ff9a9e, #fecfef, #a1c4fd, #c2e9fb);
-      --text-main: #ff477e;
-      --text-sub: #6c5ce7;
-      --card-bg: rgba(255, 255, 255, 0.55);
-    }
-
-    /* Theme 2: Dark Velvet */
-    [data-theme="dark"] {
-      --bg-gradient: linear-gradient(-45deg, #0f172a, #1e1b4b, #311042, #181825);
-      --text-main: #ff758c;
-      --text-sub: #a78bfa;
-      --card-bg: rgba(30, 27, 75, 0.65);
-    }
-
-    /* Theme 3: Mint Blossom */
-    [data-theme="mint"] {
-      --bg-gradient: linear-gradient(-45deg, #a8edd9, #fed6e3, #d4fc79, #96e6a1);
-      --text-main: #2b7a78;
-      --text-sub: #172a3a;
-      --card-bg: rgba(255, 255, 255, 0.65);
-    }
-
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Comfortaa', cursive, sans-serif; user-select: none; }
     body {
-      background: var(--bg-gradient); background-size: 400% 400%; animation: gradientBG 12s ease infinite;
+      background: linear-gradient(-45deg, #ff9a9e, #fecfef, #a1c4fd, #c2e9fb);
+      background-size: 400% 400%; animation: gradientBG 12s ease infinite;
       min-height: 100vh; display: flex; justify-content: center; align-items: center; text-align: center;
-      overflow: hidden; position: relative; transition: background 0.5s ease;
+      overflow: hidden; position: relative;
     }
     @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-
-    /* Compact 2-Line Theme Toggle Button */
-    .theme-toggle {
-      position: absolute; top: 12px; left: 12px; z-index: 100;
-      background: var(--card-bg); border: 1.5px solid rgba(255, 255, 255, 0.85);
-      padding: 5px 10px; border-radius: 14px; font-size: 0.68rem; line-height: 1.25;
-      cursor: pointer; color: var(--text-main); font-weight: bold; text-align: center;
-      max-width: 75px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); backdrop-filter: blur(10px);
-    }
 
     .bg-heart {
       position: absolute; bottom: -30px; font-size: 1.2rem; pointer-events: none;
@@ -59,18 +27,18 @@
 
     .container {
       width: 88%; max-width: 360px; padding: 30px 20px;
-      background: var(--card-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      background: rgba(255, 255, 255, 0.55); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
       border-radius: 30px; border: 1.5px solid rgba(255, 255, 255, 0.8);
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15); z-index: 10;
     }
-    h2 { color: var(--text-main); margin-bottom: 6px; font-size: 1.3rem; }
-    p { color: var(--text-sub); margin-bottom: 15px; font-size: 0.85rem; }
+    h2 { color: #ff477e; margin-bottom: 6px; font-size: 1.3rem; }
+    p { color: #6c5ce7; margin-bottom: 15px; font-size: 0.85rem; }
 
-    .pin-display { font-size: 2rem; letter-spacing: 10px; color: var(--text-main); height: 45px; margin-bottom: 10px; }
+    .pin-display { font-size: 2rem; letter-spacing: 10px; color: #ff477e; height: 45px; margin-bottom: 10px; }
     .keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
     .key {
       background: rgba(255, 255, 255, 0.8); border: none; padding: 15px; font-size: 1.2rem;
-      font-weight: bold; color: var(--text-main); border-radius: 50%; width: 55px; height: 55px;
+      font-weight: bold; color: #ff477e; border-radius: 50%; width: 55px; height: 55px;
       margin: 0 auto; display: flex; align-items: center; justify-content: center;
       box-shadow: 0 4px 10px rgba(0,0,0,0.05); cursor: pointer; transition: transform 0.1s;
     }
@@ -78,8 +46,6 @@
   </style>
 </head>
 <body>
-
-  <button class="theme-toggle" onclick="switchTheme()">🎨 Change<br>Theme</button>
 
   <div class="container">
     <h2>🔒 Secret Passcode</h2>
@@ -117,7 +83,6 @@
 
     function checkPin() {
       if (currentPin === correctPin) {
-        // Confetti effect before redirect
         confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
         if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
         setTimeout(() => {
@@ -126,18 +91,6 @@
       } else {
         alert("Wrong Code! Try again 💖");
         clearPin();
-      }
-    }
-
-    // 3 Themes Cycle: Default -> Dark -> Mint -> Default
-    function switchTheme() {
-      const currentTheme = document.body.getAttribute('data-theme');
-      if (!currentTheme) {
-        document.body.setAttribute('data-theme', 'dark');
-      } else if (currentTheme === 'dark') {
-        document.body.setAttribute('data-theme', 'mint');
-      } else {
-        document.body.removeAttribute('data-theme');
       }
     }
 
